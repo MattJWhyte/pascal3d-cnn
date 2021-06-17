@@ -49,14 +49,14 @@ def test_loop(dataloader, model, loss_fn):
 train_set = PascalDataset()
 val_set = PascalDataset(train=False)
 
-train_dataloader = DataLoader(train_set, batch_size=64)
-test_dataloader = DataLoader(val_set, batch_size=64)
+train_dataloader = DataLoader(train_set, batch_size=256)
+test_dataloader = DataLoader(val_set, batch_size=256)
 
 model = Net1()
 model.to(device)
 
 loss_fn = nn.MSELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=0.003)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
 
 epochs = 10
 for t in range(epochs):
