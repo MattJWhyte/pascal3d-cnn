@@ -4,6 +4,8 @@ import cv2
 import scipy.io as sio
 import numpy as np
 import os
+
+import torch
 from torch.utils.data import DataLoader, Dataset
 
 DATASET_TRAIN_DIR = "pascal3d_imagenet_512_320_train/"
@@ -22,15 +24,15 @@ class PascalDataset(Dataset):
         annotation_dict = json.load(open(dataset_dir+"annotation.json","r"))
         for cat in CATEGORIES:
             for img_name,ann in annotation_dict[cat].items():
-                img = cv2.imread(dataset_dir+cat+"_imagenet/{}.png".format(img_name))
-                img = np.moveaxis(img, -1, 0)
-                img = img/255.0
-                self.data.append(img)
+                self.data.append(dataset_dir + cat + "_imagenet/{}.png".format(img_name))
                 self.labels.append(np.array(ann))
 
     def __len__(self):
         return len(self.data)
 
     def __getitem__(self, idx):
-        return self.data[idx], self.labels[idx]
+        img = cv2.imread(self.data[idx])
+        img = np.moveaxis(img, -1, 0)
+        img = img / 255.0
+        return torch.from_numpy(img).float(), torch.from_numpy(self.labels[idx]).float()
 
