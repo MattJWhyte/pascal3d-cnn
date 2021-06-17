@@ -21,7 +21,6 @@ class Net1(nn.Module):
         self.fc4 = nn.Linear(16,3)
 
     def forward(self, x):
-        print("model")
         # C1
         x = F.max_pool2d(F.relu(self.conv1(x)), 2)
         # C2
@@ -32,9 +31,9 @@ class Net1(nn.Module):
         x = F.max_pool2d(F.relu(self.conv6(x)), 2)
 
         x = torch.flatten(x, 1)    # flatten all dimensions except the batch dimension
-        x = self.fc1(x)
-        x = self.fc2(x)
-        x = self.fc3(x)
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = F.relu(self.fc3(x))
         x = self.fc4(x)
 
         return x
