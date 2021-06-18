@@ -42,25 +42,25 @@ def test_loop(dataloader, model, loss_fn):
             #correct += (pred.argmax(1) == y).type(torch.float).sum().item()
 
     test_loss /= size
-    correct /= size
     print(f"Avg loss: {test_loss:>8f} \n")
 
 
 train_set = PascalDataset()
 val_set = PascalDataset(train=False)
 
-train_dataloader = DataLoader(train_set, batch_size=256)
-test_dataloader = DataLoader(val_set, batch_size=256)
+train_dataloader = DataLoader(train_set, batch_size=128)
+test_dataloader = DataLoader(val_set, batch_size=128)
 
 model = Net1()
 model.to(device)
 
 loss_fn = nn.MSELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.002)
 
-epochs = 10
+epochs = 20
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train_loop(train_dataloader, model, loss_fn, optimizer)
     test_loop(test_dataloader, model, loss_fn)
+    model.save("../models/pascal3d-vp-cnn-net1.pth")
 print("Done!")
