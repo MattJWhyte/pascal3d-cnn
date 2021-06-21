@@ -25,6 +25,8 @@ def train_loop(dataloader, model, loss_fn, optimizer):
         loss.backward()
         optimizer.step()
 
+        del X
+
         if batch % 4 == 0:
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
@@ -40,6 +42,7 @@ def test_loop(dataloader, model, loss_fn):
             pred = model(X)
             test_loss += loss_fn(pred, y).item()
             #correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+            del X
 
     test_loss /= size
     print(f"Avg loss: {test_loss:>8f} \n")
