@@ -21,9 +21,8 @@ class Net1(nn.Module):
 
         # No more than 1024
         self.fc1 = nn.Linear(4 * 4 * 64, 256)  # 5*5 from image dimension
-        self.fc2 = nn.Linear(256, 128)
-        self.fc3 = nn.Linear(128, 64)
-        self.fc4 = nn.Linear(64, 16)
+        self.fc2 = nn.Linear(256, 64)
+        self.fc3 = nn.Linear(64, 16)
         self.fc5 = nn.Linear(16, 3)
 
     def forward(self, x):
@@ -45,7 +44,6 @@ class Net1(nn.Module):
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
         x = F.relu(self.fc4(x))
-        x = F.relu(self.fc5(x))
 
         return x
 
