@@ -8,8 +8,8 @@ import os
 import torch
 from torch.utils.data import DataLoader, Dataset
 
-DATASET_TRAIN_DIR = "imagenet_120_120_cropped_train/"
-DATASET_VAL_DIR = "imagenet_120_120_cropped_val/"
+DATASET_TRAIN_DIR = "imagenet_128_128_cropped_train/"
+DATASET_VAL_DIR = "imagenet_128_128_cropped_val/"
 CATEGORIES = ["aeroplane", "bicycle", "boat", "bottle", "bus", "car", "chair", "diningtable", "motorbike", "sofa", "train", "tvmonitor"]
 PASCAL_DIR = "~/pascal3d-analysis/PASCAL3D+_release1.1/"
 
