@@ -25,7 +25,7 @@ def train_loop(dataloader, model, loss_fn, optimizer):
         loss.backward()
         optimizer.step()
 
-        if batch % 4 == 0:
+        if batch % 20 == 0:
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
@@ -75,5 +75,5 @@ for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train_loop(train_dataloader, model, loss_fn, optimizer)
     test_loop(test_dataloader, model, loss_fn)
-    model.save("../models/pascal3d-vp-cnn-net1.pth")
+    model.save("models/pascal3d-vp-cnn-net1.pth")
 print("Done!")
