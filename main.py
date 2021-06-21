@@ -20,12 +20,13 @@ def train_loop(dataloader, model, loss_fn, optimizer):
         pred = model(X)
         loss = loss_fn(pred, y)
 
+        X.detach()
+        del X
+
         # Backpropagation
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-
-        del X
 
         if batch % 4 == 0:
             loss, current = loss.item(), batch * len(X)
