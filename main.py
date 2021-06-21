@@ -20,12 +20,6 @@ def train_loop(dataloader, model, loss_fn, optimizer):
         pred = model(X)
         loss = loss_fn(pred, y)
 
-        X.detach()
-        del X
-        y.detach()
-        del y
-        torch.cuda.empty_cache()
-
         # Backpropagation
         optimizer.zero_grad()
         loss.backward()
@@ -34,6 +28,12 @@ def train_loop(dataloader, model, loss_fn, optimizer):
         if batch % 4 == 0:
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
+
+        X.detach()
+        del X
+        y.detach()
+        del y
+        torch.cuda.empty_cache()
 
 
 def test_loop(dataloader, model, loss_fn):
