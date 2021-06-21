@@ -12,7 +12,7 @@ class Net1(nn.Module):
         self.conv1 = nn.Conv2d(3, 256, 7) # 122 x 122
         self.conv2 = nn.Conv2d(256, 256, 7) # 116 x 116 pool 4 = 29 x 29
         self.conv3 = nn.Conv2d(256, 128, 7, stride=(2,2)) # 12 x 12
-        self.conv4 = nn.Conv2d(128, 128, 5, stride=(2,2)) # 4 x 4
+        self.conv4 = nn.Conv2d(128, 64, 5, stride=(2,2)) # 4 x 4
 
         # More channels , smaller convolutions
         # Use stride for convolutions instead of max pool
