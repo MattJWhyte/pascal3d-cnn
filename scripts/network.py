@@ -20,8 +20,8 @@ class Net1(nn.Module):
         # Downsample image more before model (128)
 
         # No more than 1024
-        self.fc1 = nn.Linear(4 * 4 * 64, 256)  # 5*5 from image dimension
-        self.fc2 = nn.Linear(256, 64)
+        self.fc1 = nn.Linear(4 * 4 * 64, 128)  # 5*5 from image dimension
+        self.fc2 = nn.Linear(128, 64)
         self.fc3 = nn.Linear(64, 16)
         self.fc4 = nn.Linear(16, 3)
 
