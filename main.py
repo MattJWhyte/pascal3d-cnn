@@ -24,6 +24,7 @@ def train_loop(dataloader, model, loss_fn, optimizer):
         del X
         y.detach()
         del y
+        torch.cuda.empty_cache()
 
         # Backpropagation
         optimizer.zero_grad()
@@ -48,6 +49,7 @@ def test_loop(dataloader, model, loss_fn):
             del X
             y.detach()
             del y
+            torch.cuda.empty_cache()
             #correct += (pred.argmax(1) == y).type(torch.float).sum().item()
 
     test_loss /= size
