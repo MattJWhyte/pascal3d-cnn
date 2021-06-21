@@ -8,8 +8,8 @@ import os
 import torch
 from torch.utils.data import DataLoader, Dataset
 
-DATASET_TRAIN_DIR = "pascal3d_imagenet_512_320_train/"
-DATASET_VAL_DIR = "pascal3d_imagenet_512_320_val/"
+DATASET_TRAIN_DIR = "imagenet_120_120_train/"
+DATASET_VAL_DIR = "imagenet_120_120_val/"
 CATEGORIES = ["aeroplane", "bicycle", "boat", "bottle", "bus", "car", "chair", "diningtable", "motorbike", "sofa", "train", "tvmonitor"]
 PASCAL_DIR = "~/pascal3d-analysis/PASCAL3D+_release1.1/"
 
@@ -32,7 +32,6 @@ class PascalDataset(Dataset):
 
     def __getitem__(self, idx):
         img = cv2.imread(self.data[idx])
-        img = cv2.resize(img, (128,128), interpolation=cv2.INTER_AREA)
         img = np.moveaxis(img, -1, 0)
         img = img / 255.0
         out = torch.from_numpy(img).float()
