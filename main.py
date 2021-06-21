@@ -22,6 +22,8 @@ def train_loop(dataloader, model, loss_fn, optimizer):
 
         X.detach()
         del X
+        y.detach()
+        del y
 
         # Backpropagation
         optimizer.zero_grad()
@@ -42,8 +44,11 @@ def test_loop(dataloader, model, loss_fn):
             X, y = X.to(device), y.to(device)
             pred = model(X)
             test_loss += loss_fn(pred, y).item()
-            #correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+            X.detach()
             del X
+            y.detach()
+            del y
+            #correct += (pred.argmax(1) == y).type(torch.float).sum().item()
 
     test_loss /= size
     print(f"Avg loss: {test_loss:>8f} \n")
