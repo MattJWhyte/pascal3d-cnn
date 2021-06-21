@@ -61,8 +61,8 @@ def test_loop(dataloader, model, loss_fn):
 train_set = PascalDataset()
 val_set = PascalDataset(train=False)
 
-train_dataloader = DataLoader(train_set, batch_size=64)
-test_dataloader = DataLoader(val_set, batch_size=64)
+train_dataloader = DataLoader(train_set, batch_size=2)
+test_dataloader = DataLoader(val_set, batch_size=2)
 
 model = Net1()
 model.to(device)
