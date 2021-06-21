@@ -25,8 +25,6 @@ def train_loop(dataloader, model, loss_fn, optimizer):
         loss.backward()
         optimizer.step()
 
-        print("Attempt")
-
         if batch % 4 == 0:
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
@@ -56,6 +54,8 @@ def test_loop(dataloader, model, loss_fn):
 
     test_loss /= size
     print(f"Avg loss: {test_loss:>8f} \n")
+
+    model.save("models/test-model.pth")
 
 
 train_set = PascalDataset()
