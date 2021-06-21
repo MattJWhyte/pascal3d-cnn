@@ -15,6 +15,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 def train_loop(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
     for batch, (X, y) in enumerate(dataloader):
+
         X, y = X.to(device), y.to(device)
         # Compute prediction and loss
         pred = model(X)
@@ -61,8 +62,8 @@ def test_loop(dataloader, model, loss_fn):
 train_set = PascalDataset()
 val_set = PascalDataset(train=False)
 
-train_dataloader = DataLoader(train_set, batch_size=32)
-test_dataloader = DataLoader(val_set, batch_size=32)
+train_dataloader = DataLoader(train_set, batch_size=64)
+test_dataloader = DataLoader(val_set, batch_size=64)
 
 model = Net1()
 model.to(device)
