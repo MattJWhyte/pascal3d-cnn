@@ -52,7 +52,7 @@ def evaluate_model(pth):
         del X
         torch.cuda.empty_cache()
         acc += k
-    return acc/ct, np.median(np.array([]))
+    return acc/ct, np.median(np.array(theta))
 
 
 print(evaluate_model("models/test-model.pth"))
