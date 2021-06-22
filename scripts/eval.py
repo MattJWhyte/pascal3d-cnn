@@ -40,4 +40,4 @@ def evaluate_model(pth):
     return acc/n
 
 
-print(evaluate_model("../models/test-model.pth"))
+print(evaluate_model("models/test-model.pth"))
