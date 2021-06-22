@@ -59,10 +59,6 @@ def test_loop(dataloader, model, loss_fn):
             theta += get_angle(y, pred)
             correct += k
 
-            X.detach()
-            del X
-            y.detach()
-            del y
             torch.cuda.empty_cache()
 
     test_loss /= size
@@ -82,7 +78,7 @@ model = Net1()
 model.to(device)
 
 loss_fn = nn.MSELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=0.005)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.003)
 
 epochs = 20
 for t in range(epochs):
