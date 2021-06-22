@@ -15,7 +15,7 @@ def get_angle(x,y):
 
 # Count number of times the angle between predicted label and target is < 30 degrees
 def thirty_deg_accuracy(y, target):
-    y = y.detach().cpu().numpy()
+    y = y.numpy()
     target = target.detach().numpy()
     y_norm = np.linalg.norm(y, axis=1)
     target_norm = np.linalg.norm(target, axis=1)
@@ -40,7 +40,7 @@ def evaluate_model(pth):
     for X, target in dataloader:
         X = X.to('cuda' if torch.cuda.is_available() else "cpu")
         ct += 1
-        y = nt(X).to("cpu")
+        y = nt(X).detach().cpu()
         k = thirty_deg_accuracy(y, target)
         theta.append(np.rad2deg(get_angle(y, target)))
         X.detach()
