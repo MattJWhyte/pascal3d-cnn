@@ -1,12 +1,14 @@
 
 import torch
 import torch.nn as nn
+import numpy as np
 from torch.utils.data import Dataset, DataLoader
 import torch.nn.functional as F
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 from scripts.network import Net1
 from scripts.dataset import PascalDataset
+from scripts.eval import thirty_deg_accuracy, get_angle
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -41,37 +43,46 @@ def train_loop(dataloader, model, loss_fn, optimizer):
 
 def test_loop(dataloader, model, loss_fn):
     size = len(dataloader.dataset)
-    test_loss, correct = 0, 0
+    test_loss, correct, theta = 0.0, 0.0, []
+    ct = 0.0
 
     with torch.no_grad():
         for X, y in dataloader:
+            ct += 1
             X, y = X.to(device), y.to(device)
             pred = model(X)
             test_loss += loss_fn(pred, y).item()
+
+            pred = pred.detach().cpu()
+            y = y.detach().cpu()
+            k = thirty_deg_accuracy(pred, y)
+            theta += get_angle(y, pred)
+            correct += k
+
             X.detach()
             del X
             y.detach()
             del y
             torch.cuda.empty_cache()
-            #correct += (pred.argmax(1) == y).type(torch.float).sum().item()
 
     test_loss /= size
     print(f"Avg loss: {test_loss:>8f} \n")
-
+    print("Accuracy: {}".format(correct/ct))
+    print("Median angle: {}".format(np.median(np.array(theta))))
     model.save("models/test-model.pth")
 
 
 train_set = PascalDataset()
 val_set = PascalDataset(train=False)
 
-train_dataloader = DataLoader(train_set, batch_size=48)
-test_dataloader = DataLoader(val_set, batch_size=48)
+train_dataloader = DataLoader(train_set, batch_size=64)
+test_dataloader = DataLoader(val_set, batch_size=64)
 
 model = Net1()
 model.to(device)
 
 loss_fn = nn.MSELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.005)
 
 epochs = 20
 for t in range(epochs):
