@@ -37,7 +37,7 @@ def evaluate_model(pth):
     ct = 0.0
     theta = []
     for X, target in dataloader:
-        X = X.to('cuda' if torch.cuda.is_available())
+        X = X.to('cuda' if torch.cuda.is_available() else "cpu")
         ct += 1
         y = nt(X)
         k = thirty_deg_accuracy(y, target)
