@@ -1,6 +1,6 @@
 
 import numpy as np
-import network
+import scripts.network
 from dataset import PascalDataset
 from torch.utils.data import DataLoader
 import torch
@@ -32,7 +32,7 @@ def thirty_deg_accuracy(y, target):
 
 def evaluate_model(pth):
     # Load model
-    nt = network.Net1()
+    nt = scripts.network.Net1()
     nt.load(pth)
     nt.eval()
     nt.to('cuda' if torch.cuda.is_available() else "cpu")
