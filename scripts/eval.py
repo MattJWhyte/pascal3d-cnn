@@ -40,7 +40,7 @@ def evaluate_model(pth):
     for X, target in dataloader:
         X = X.to('cuda' if torch.cuda.is_available() else "cpu")
         ct += 1
-        y = nt(X)
+        y = nt(X).to("cpu")
         k = thirty_deg_accuracy(y, target)
         theta.append(np.rad2deg(get_angle(y, target)))
         X.detach()
