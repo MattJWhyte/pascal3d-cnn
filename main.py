@@ -17,12 +17,14 @@ def train_loop(dataloader, model, loss_fn, optimizer):
     for batch, (X, y) in enumerate(dataloader):
 
         X, y = X.to(device), y.to(device)
+
+        optimizer.zero_grad()
+
         # Compute prediction and loss
         pred = model(X)
         loss = loss_fn(pred, y)
 
         # Backpropagation
-        optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
@@ -69,7 +71,7 @@ model = Net1()
 model.to(device)
 
 loss_fn = nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.005)
+optimizer = torch.optim.Adam(model.parameters())
 
 epochs = 20
 for t in range(epochs):
