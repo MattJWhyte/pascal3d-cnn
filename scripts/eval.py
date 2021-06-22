@@ -2,6 +2,7 @@
 import numpy as np
 import network
 from dataset import PascalDataset
+from torch.utils.data import DataLoader
 
 # Python file for all evaluation metrics / graphics of nn against ground truth
 
@@ -29,15 +30,17 @@ def evaluate_model(pth):
     nt.load(pth)
     nt.eval()
     dset = PascalDataset(train=False)
+    dataloader = DataLoader(dset, batch_size=48)
     n = len(dset)
     acc = 0.0
-    for i in range(0,n):
-        X, target = dset[i]
+    ct = 0.0
+    for X, target in dataloader:
+        ct += 1
         y = nt(X)
         k = thirty_deg_accuracy(y, target)
         print(k)
         acc += k
-    return acc/n
+    return acc/ct
 
 
 print(evaluate_model("models/test-model.pth"))
