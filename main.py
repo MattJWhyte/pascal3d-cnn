@@ -71,7 +71,7 @@ model = Net1()
 model.to(device)
 
 loss_fn = nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters())
+optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 
 epochs = 20
 for t in range(epochs):
