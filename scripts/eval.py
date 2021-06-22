@@ -14,8 +14,8 @@ def get_angle(x,y):
 
 # Count number of times the angle between predicted label and target is < 30 degrees
 def thirty_deg_accuracy(y, target):
-    y = y.numpy()
-    target = target.numpy()
+    y = y.detach().numpy()
+    target = target.detach().numpy()
     y_norm = np.linalg.norm(y, axis=1)
     target_norm = np.linalg.norm(target, axis=1)
     norm = y_norm * target_norm.T
