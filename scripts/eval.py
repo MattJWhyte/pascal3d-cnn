@@ -3,6 +3,7 @@ import numpy as np
 import network
 from dataset import PascalDataset
 from torch.utils.data import DataLoader
+import torch
 
 # Python file for all evaluation metrics / graphics of nn against ground truth
 
@@ -34,13 +35,18 @@ def evaluate_model(pth):
     n = len(dset)
     acc = 0.0
     ct = 0.0
+    theta = []
     for X, target in dataloader:
+        X = X.to('cuda' if torch.cuda.is_available())
         ct += 1
         y = nt(X)
         k = thirty_deg_accuracy(y, target)
-        print(k)
+        theta.append(np.rad2deg(get_angle(y, target)))
+        X.detach()
+        del X
+        torch.cuda.empty_cache()
         acc += k
-    return acc/ct
+    return acc/ct, np.median(np.array([]))
 
 
 print(evaluate_model("models/test-model.pth"))
