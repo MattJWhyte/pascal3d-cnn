@@ -9,8 +9,13 @@ import torch
 
 
 # Return angle between vectors
-def get_angle(x,y):
-    return np.arccos(np.dot(x,y))
+def get_angle(y,target):
+    y = y.numpy()
+    target = target.detach().numpy()
+    y_norm = np.linalg.norm(y, axis=1)
+    target_norm = np.linalg.norm(target, axis=1)
+    norm = y_norm * target_norm.T
+    return np.rad2deg(np.arccos(np.diag((y @ target.T)) / norm)).tolist()
 
 
 # Count number of times the angle between predicted label and target is < 30 degrees
@@ -42,7 +47,7 @@ def evaluate_model(pth):
         ct += 1
         y = nt(X).detach().cpu()
         k = thirty_deg_accuracy(y, target)
-        theta.append(np.rad2deg(get_angle(y, target)))
+        theta += get_angle(y, target)
         X.detach()
         del X
         torch.cuda.empty_cache()
