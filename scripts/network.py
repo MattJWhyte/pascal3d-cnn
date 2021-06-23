@@ -121,14 +121,12 @@ class Net3(nn.Module):
     def __init__(self):
         super(Net3, self).__init__()
         # Input 128 x 128
-        self.conv1 = nn.Conv2d(3, 16, 13, stride=(2,2))
+        self.conv1 = nn.Conv2d(3, 16, 13, stride=(2,2))  # 58 x 58
         self.bn1 = nn.BatchNorm2d(16)
-        self.conv2 = nn.Conv2d(16, 16, 11, stride=(2, 2))
+        self.conv2 = nn.Conv2d(16, 16, 11, stride=(3, 3))  # 16 x 16
         self.bn2 = nn.BatchNorm2d(16)
-        self.conv3 = nn.Conv2d(16, 16, 5, stride=(2, 2))
+        self.conv3 = nn.Conv2d(16, 16, 11, stride=(2, 2))  # 3 x 3
         self.bn3 = nn.BatchNorm2d(16)
-        self.conv4 = nn.Conv2d(16, 16, 5, stride=(2, 2))
-        self.bn4 = nn.BatchNorm2d(16)
 
         # More channels , smaller convolutions
         # Use stride for convolutions instead of max pool
@@ -146,8 +144,6 @@ class Net3(nn.Module):
         x = F.relu(self.bn2(self.conv2(x)))
         # C3
         x = F.relu(self.bn3(self.conv3(x)))
-        # C4
-        x = F.relu(self.bn4(self.conv4(x)))
 
         # Try get it to column vec
 
