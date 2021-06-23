@@ -10,7 +10,7 @@ class Net1(nn.Module):
         super(Net1, self).__init__()
         # Input 128 x 128
         self.conv1 = nn.Conv2d(3, 64, 7) # 122 x 122
-        self.conv2 = nn.Conv2d(64, 128, 7) # 116 x 116 pool 4 = 29 x 29
+        self.conv2 = nn.Conv2d(64, 128, 7, stride=(2,2)) # 58 x 58 pool 2 = 29 x 29
         self.conv3 = nn.Conv2d(128, 128, 7, stride=(2,2)) # 12 x 12
         self.conv4 = nn.Conv2d(128, 256, 5, stride=(2,2)) # 4 x 4
 
@@ -28,7 +28,7 @@ class Net1(nn.Module):
         # C1
         x = F.relu(self.conv1(x))
         # C2
-        x = F.max_pool2d(F.relu(self.conv2(x)), 4)
+        x = F.max_pool2d(F.relu(self.conv2(x)), 2)
         # C3
         x = F.relu(self.conv3(x))
         # C4
