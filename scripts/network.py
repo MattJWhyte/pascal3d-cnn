@@ -80,9 +80,9 @@ class Net2(nn.Module):
 
         # No more than 1024
         self.fc1 = nn.Linear(6 * 6 * 128, 128)  # 5*5 from image dimension
-        self.bn3 = nn.BatchNorm2d(128)
+        self.bn4 = nn.BatchNorm1d(128)
         self.fc2 = nn.Linear(128, 64)
-        self.bn4 = nn.BatchNorm2d(64)
+        self.bn5 = nn.BatchNorm1d(64)
         self.fc3 = nn.Linear(64, 3)
 
     def forward(self, x):
@@ -96,8 +96,8 @@ class Net2(nn.Module):
         # Try get it to column vec
 
         x = torch.flatten(x, 1)    # flatten all dimensions except the batch dimension
-        x = F.relu(self.bn3(self.fc1(x)))
-        x = F.relu(self.bn4(self.fc2(x)))
+        x = F.relu(self.bn4(self.fc1(x)))
+        x = F.relu(self.bn5(self.fc2(x)))
 
         return self.fc3(x)
 
