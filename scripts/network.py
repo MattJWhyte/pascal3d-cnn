@@ -129,7 +129,7 @@ class Net3(nn.Module):
         self.bn3 = nn.BatchNorm2d(128)
         self.conv4 = nn.Conv2d(128, 128, 5)
         self.bn4 = nn.BatchNorm2d(128)
-        self.conv5 = nn.Conv2d(128, 128, 3)
+        self.conv5 = nn.Conv2d(128, 128, 3, stride=(2,2))
         self.bn5 = nn.BatchNorm2d(128)
 
         # More channels , smaller convolutions
@@ -137,7 +137,7 @@ class Net3(nn.Module):
         # Downsample image more before model (128)
 
         # No more than 1024
-        self.fc1 = nn.Linear(7 * 7 * 128, 128)  # 5*5 from image dimension
+        self.fc1 = nn.Linear(6 * 6 * 128, 128)  # 5*5 from image dimension
         self.bn6 = nn.BatchNorm1d(128)
         self.fc2 = nn.Linear(128, 64)
         self.bn7 = nn.BatchNorm1d(64)
