@@ -86,7 +86,7 @@ def test_loop(dataloader, model, loss_fn):
     print("Median angle: {}".format(np.median(np.array(theta))))
     print("Mean angle: {}".format(np.mean(np.array(theta))))
     test_loss_ls.append(test_loss)
-    test_acc_ls.append(correct)
+    test_acc_ls.append(correct/ct)
 
 
 train_set = PascalDataset()
