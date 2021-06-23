@@ -67,11 +67,11 @@ val_set = PascalDataset(train=False)
 train_dataloader = DataLoader(train_set, batch_size=128)
 test_dataloader = DataLoader(val_set, batch_size=128)
 
-model = Net1()
+model = Net2()
 model.to(device)
 
 loss_fn = nn.MSELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.003)
 
 epochs = 50
 for t in range(epochs):
