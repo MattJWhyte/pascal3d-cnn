@@ -68,8 +68,11 @@ class Net2(nn.Module):
         super(Net2, self).__init__()
         # Input 128 x 128
         self.conv1 = nn.Conv2d(3, 32, 21, stride=(2,2))
+        self.bn1 = nn.BatchNorm2d(32)
         self.conv2 = nn.Conv2d(32, 64, 23, stride=(2, 2))
+        self.bn2 = nn.BatchNorm2d(64)
         self.conv3 = nn.Conv2d(64, 128, 5, stride=(2, 2))
+        self.bn3 = nn.BatchNorm2d(128)
 
         # More channels , smaller convolutions
         # Use stride for convolutions instead of max pool
@@ -82,11 +85,11 @@ class Net2(nn.Module):
 
     def forward(self, x):
         # C1
-        x = F.relu(self.conv1(x))
+        x = F.relu(self.bn1(self.conv1(x)))
         # C2
-        x = F.relu(self.conv2(x))
+        x = F.relu(self.bn2(self.conv2(x)))
         # C3
-        x = F.relu(self.conv3(x))
+        x = F.relu(self.bn3(self.conv3(x)))
 
         # Try get it to column vec
 
