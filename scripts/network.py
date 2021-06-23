@@ -125,21 +125,19 @@ class Net3(nn.Module):
         self.bn1 = nn.BatchNorm2d(32)
         self.conv2 = nn.Conv2d(32, 64, 11, stride=(2, 2))
         self.bn2 = nn.BatchNorm2d(64)
-        self.conv3 = nn.Conv2d(64, 128, 7)
+        self.conv3 = nn.Conv2d(64, 128, 5, stride=(2, 2))
         self.bn3 = nn.BatchNorm2d(128)
-        self.conv4 = nn.Conv2d(128, 128, 5)
+        self.conv4 = nn.Conv2d(128, 128, 5, stride=(2, 2))
         self.bn4 = nn.BatchNorm2d(128)
-        self.conv5 = nn.Conv2d(128, 128, 3, stride=(2,2))
-        self.bn5 = nn.BatchNorm2d(128)
 
         # More channels , smaller convolutions
         # Use stride for convolutions instead of max pool
         # Downsample image more before model (128)
 
         # No more than 1024
-        self.fc1 = nn.Linear(6 * 6 * 128, 64)  # 5*5 from image dimension
-        self.bn6 = nn.BatchNorm1d(64)
-        self.fc2 = nn.Linear(64, 3)
+        self.fc1 = nn.Linear(3 * 3 * 128, 128)  # 5*5 from image dimension
+        self.bn5 = nn.BatchNorm1d(128)
+        self.fc2 = nn.Linear(128, 3)
 
     def forward(self, x):
         # C1
@@ -150,13 +148,11 @@ class Net3(nn.Module):
         x = F.relu(self.bn3(self.conv3(x)))
         # C4
         x = F.relu(self.bn4(self.conv4(x)))
-        # C4
-        x = F.relu(self.bn5(self.conv5(x)))
 
         # Try get it to column vec
 
         x = torch.flatten(x, 1)    # flatten all dimensions except the batch dimension
-        x = F.relu(self.bn6(self.fc1(x)))
+        x = F.relu(self.bn5(self.fc1(x)))
         x = self.fc2(x)
 
         return x
