@@ -20,7 +20,7 @@ class PascalDataset(Dataset):
         self.data = []
         self.labels = []
 
-        dataset_dir = DATASET_TRAIN_DIR if not train else DATASET_VAL_DIR
+        dataset_dir = DATASET_TRAIN_DIR if train else DATASET_VAL_DIR
         annotation_dict = json.load(open(dataset_dir+"annotation.json","r"))
         for cat in CATEGORIES:
             for img_name,ann in annotation_dict[cat].items():
