@@ -80,9 +80,9 @@ class Net2(nn.Module):
 
         # No more than 1024
         self.fc1 = nn.Linear(6 * 6 * 128, 128)  # 5*5 from image dimension
-        self.bn3 = nn.BatchNorm2d(128)
+        self.bn3 = nn.BatchNorm1d(128)
         self.fc2 = nn.Linear(128, 64)
-        self.bn4 = nn.BatchNorm2d(64)
+        self.bn4 = nn.BatchNorm1d(64)
         self.fc3 = nn.Linear(64, 3)
 
     def forward(self, x):
