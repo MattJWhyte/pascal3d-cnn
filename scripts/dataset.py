@@ -35,9 +35,5 @@ class PascalDataset(Dataset):
         img = np.moveaxis(img, -1, 0)
         img = img / 255.0
         out = torch.from_numpy(img).float()
-        print(out)
-        print("LABELS-------------")
-        print(self.labels[idx])
-        print(torch.from_numpy(self.labels[idx]).float())
         return out, torch.from_numpy(self.labels[idx]).float()
 
