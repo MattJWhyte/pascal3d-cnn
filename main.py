@@ -61,10 +61,11 @@ def test_loop(dataloader, model, loss_fn):
 
             torch.cuda.empty_cache()
 
-    test_loss /= size
+    test_loss /= ct
     print(f"Avg loss: {test_loss:>8f} \n")
     print("Accuracy: {}".format(correct/ct))
     print("Median angle: {}".format(np.median(np.array(theta))))
+    print("Mean angle: {}".format(np.mean(np.array(theta))))
     model.save("models/test-model.pth")
 
 
@@ -78,7 +79,7 @@ model = Net1()
 model.to(device)
 
 loss_fn = nn.MSELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=0.003)
+optimizer = torch.optim.Adam(model.parameters())
 
 epochs = 20
 for t in range(epochs):

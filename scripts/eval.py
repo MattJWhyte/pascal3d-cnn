@@ -54,5 +54,3 @@ def evaluate_model(pth):
         acc += k
     return acc/ct, np.median(np.array(theta))
 
-
-print(evaluate_model("models/test-model.pth"))
