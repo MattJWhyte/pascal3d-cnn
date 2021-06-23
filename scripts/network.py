@@ -121,11 +121,11 @@ class Net3(nn.Module):
     def __init__(self):
         super(Net3, self).__init__()
         # Input 128 x 128
-        self.conv1 = nn.Conv2d(3, 16, 13, stride=(2,2))  # 58 x 58
-        self.bn1 = nn.BatchNorm2d(16, track_running_stats=False)
-        self.conv2 = nn.Conv2d(16, 16, 11, stride=(3, 3))  # 16 x 16
-        self.bn2 = nn.BatchNorm2d(16, track_running_stats=False)
-        self.conv3 = nn.Conv2d(16, 16, 11, stride=(2, 2))  # 3 x 3
+        self.conv1 = nn.Conv2d(3, 4, 13, stride=(2,2))  # 58 x 58
+        self.bn1 = nn.BatchNorm2d(4, track_running_stats=False)
+        self.conv2 = nn.Conv2d(4, 8, 11, stride=(3, 3))  # 16 x 16
+        self.bn2 = nn.BatchNorm2d(8, track_running_stats=False)
+        self.conv3 = nn.Conv2d(8, 16, 11, stride=(2, 2))  # 3 x 3
         self.bn3 = nn.BatchNorm2d(16, track_running_stats=False)
 
         # More channels , smaller convolutions
