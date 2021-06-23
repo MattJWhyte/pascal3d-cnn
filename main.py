@@ -34,12 +34,6 @@ def train_loop(dataloader, model, loss_fn, optimizer):
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
-        X.detach()
-        del X
-        y.detach()
-        del y
-        torch.cuda.empty_cache()
-
 
 def test_loop(dataloader, model, loss_fn):
     size = len(dataloader.dataset)
