@@ -121,23 +121,23 @@ class Net3(nn.Module):
     def __init__(self):
         super(Net3, self).__init__()
         # Input 128 x 128
-        self.conv1 = nn.Conv2d(3, 32, 13, stride=(2,2))
-        self.bn1 = nn.BatchNorm2d(32)
-        self.conv2 = nn.Conv2d(32, 64, 11, stride=(2, 2))
-        self.bn2 = nn.BatchNorm2d(64)
-        self.conv3 = nn.Conv2d(64, 128, 5, stride=(2, 2))
-        self.bn3 = nn.BatchNorm2d(128)
-        self.conv4 = nn.Conv2d(128, 128, 5, stride=(2, 2))
-        self.bn4 = nn.BatchNorm2d(128)
+        self.conv1 = nn.Conv2d(3, 16, 13, stride=(2,2))
+        self.bn1 = nn.BatchNorm2d(16)
+        self.conv2 = nn.Conv2d(16, 32, 11, stride=(2, 2))
+        self.bn2 = nn.BatchNorm2d(32)
+        self.conv3 = nn.Conv2d(32, 64, 5, stride=(2, 2))
+        self.bn3 = nn.BatchNorm2d(64)
+        self.conv4 = nn.Conv2d(64, 64, 5, stride=(2, 2))
+        self.bn4 = nn.BatchNorm2d(64)
 
         # More channels , smaller convolutions
         # Use stride for convolutions instead of max pool
         # Downsample image more before model (128)
 
         # No more than 1024
-        self.fc1 = nn.Linear(3 * 3 * 128, 128)  # 5*5 from image dimension
-        self.bn5 = nn.BatchNorm1d(128)
-        self.fc2 = nn.Linear(128, 3)
+        self.fc1 = nn.Linear(3 * 3 * 64, 64)  # 5*5 from image dimension
+        self.bn5 = nn.BatchNorm1d(64)
+        self.fc2 = nn.Linear(64, 3)
 
     def forward(self, x):
         # C1
