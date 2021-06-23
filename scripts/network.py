@@ -41,6 +41,8 @@ class Net1(nn.Module):
         # C6
         x = F.relu(self.conv6(x))
 
+        print(x.size)
+
         # Try get it to column vec
 
         x = torch.flatten(x, 1)    # flatten all dimensions except the batch dimension
