@@ -1,6 +1,7 @@
 
 import torch
 import torch.nn as nn
+import matplotlib.pyplot as plt
 import numpy as np
 from torch.utils.data import Dataset, DataLoader
 import torch.nn.functional as F
@@ -13,14 +14,21 @@ from scripts.eval import thirty_deg_accuracy, get_angle
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+train_loss_ls = []
+train_acc_ls = []
+test_loss_ls = []
+test_acc_ls = []
 
 def train_loop(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
+    correct = 0.0
+    train_loss = 0.0
+    ct = 0.0
 
     model.train()
 
     for batch, (X, y) in enumerate(dataloader):
-
+        ct += 1
         X, y = X.to(device), y.to(device)
 
         optimizer.zero_grad()
@@ -33,9 +41,23 @@ def train_loop(dataloader, model, loss_fn, optimizer):
         loss.backward()
         optimizer.step()
 
+        pred = pred.detach().cpu()
+        y = y.detach().cpu()
+        k = thirty_deg_accuracy(pred, y)
+        correct += k
+
+        train_loss += loss.item()
+
         if batch % 20 == 0:
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
+
+    train_loss /= ct
+    correct /= ct
+    print("Train loss: {}".format(train_loss))
+    print("Train accuracy: {}".format(correct))
+    train_loss_ls.append(train_loss)
+    train_acc_ls.append(correct)
 
 
 def test_loop(dataloader, model, loss_fn):
@@ -59,11 +81,12 @@ def test_loop(dataloader, model, loss_fn):
             correct += k
 
     test_loss /= ct
-    print(f"Avg loss: {test_loss:>8f} \n")
-    print("Accuracy: {}".format(correct/ct))
+    print(f"Test loss: {test_loss:>8f} \n")
+    print("Test accuracy: {}".format(correct/ct))
     print("Median angle: {}".format(np.median(np.array(theta))))
     print("Mean angle: {}".format(np.mean(np.array(theta))))
-    model.save("models/test-model.pth")
+    test_loss_ls.append(test_loss)
+    test_acc_ls.append(correct)
 
 
 train_set = PascalDataset()
@@ -84,4 +107,12 @@ for t in range(epochs):
     train_loop(train_dataloader, model, loss_fn, optimizer)
     test_loop(test_dataloader, model, loss_fn)
     model.save("models/pascal3d-vp-cnn-net1.pth")
-print("Done!")
+    plt.plot([i for i in range(0+1,t+1)], train_acc_ls, 'r-', label="Train acc.")
+    plt.plot([i for i in range(0 + 1, t + 1)], train_loss_ls, 'r..', label="Train loss")
+    plt.plot([i for i in range(0 + 1, t + 1)], test_acc_ls, 'b-', label="Test acc.")
+    plt.plot([i for i in range(0 + 1, t + 1)], test_loss_ls, 'b', label="Test loss")
+    plt.legend()
+    plt.xlabel("Epoch")
+    plt.savefig("training.png")
+    plt.clf()
+
