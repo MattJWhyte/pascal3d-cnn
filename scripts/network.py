@@ -137,11 +137,9 @@ class Net3(nn.Module):
         # Downsample image more before model (128)
 
         # No more than 1024
-        self.fc1 = nn.Linear(6 * 6 * 128, 128)  # 5*5 from image dimension
-        self.bn6 = nn.BatchNorm1d(128)
-        self.fc2 = nn.Linear(128, 64)
-        self.bn7 = nn.BatchNorm1d(64)
-        self.fc3 = nn.Linear(64, 3)
+        self.fc1 = nn.Linear(6 * 6 * 128, 64)  # 5*5 from image dimension
+        self.bn6 = nn.BatchNorm1d(64)
+        self.fc2 = nn.Linear(64, 3)
 
     def forward(self, x):
         # C1
@@ -159,9 +157,9 @@ class Net3(nn.Module):
 
         x = torch.flatten(x, 1)    # flatten all dimensions except the batch dimension
         x = F.relu(self.bn6(self.fc1(x)))
-        x = F.relu(self.bn7(self.fc2(x)))
+        x = self.fc2(x)
 
-        return self.fc3(x)
+        return x
 
     def save(self, PATH):
         torch.save(self.state_dict(), PATH)
