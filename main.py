@@ -53,8 +53,6 @@ def test_loop(dataloader, model, loss_fn):
             theta += get_angle(y, pred)
             correct += k
 
-            torch.cuda.empty_cache()
-
     test_loss /= ct
     print(f"Avg loss: {test_loss:>8f} \n")
     print("Accuracy: {}".format(correct/ct))
@@ -69,7 +67,7 @@ val_set = PascalDataset(train=False)
 train_dataloader = DataLoader(train_set, batch_size=128)
 test_dataloader = DataLoader(val_set, batch_size=128)
 
-model = Net2()
+model = Net1()
 model.to(device)
 
 loss_fn = nn.MSELoss()
