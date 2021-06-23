@@ -115,3 +115,56 @@ class Net2(nn.Module):
     def load(self, PATH):
         self.load_state_dict(torch.load(PATH))
 
+
+class Net3(nn.Module):
+
+    def __init__(self):
+        super(Net3, self).__init__()
+        # Input 128 x 128
+        self.conv1 = nn.Conv2d(3, 32, 13, stride=(2,2))
+        self.bn1 = nn.BatchNorm2d(32)
+        self.conv2 = nn.Conv2d(32, 64, 11, stride=(2, 2))
+        self.bn2 = nn.BatchNorm2d(64)
+        self.conv3 = nn.Conv2d(64, 128, 7)
+        self.bn3 = nn.BatchNorm2d(128)
+        self.conv4 = nn.Conv2d(64, 128, 5)
+        self.bn4 = nn.BatchNorm2d(128)
+        self.conv5 = nn.Conv2d(64, 128, 3)
+        self.bn5 = nn.BatchNorm2d(128)
+
+        # More channels , smaller convolutions
+        # Use stride for convolutions instead of max pool
+        # Downsample image more before model (128)
+
+        # No more than 1024
+        self.fc1 = nn.Linear(7 * 7 * 128, 128)  # 5*5 from image dimension
+        self.bn6 = nn.BatchNorm1d(128)
+        self.fc2 = nn.Linear(128, 64)
+        self.bn7 = nn.BatchNorm1d(64)
+        self.fc3 = nn.Linear(64, 3)
+
+    def forward(self, x):
+        # C1
+        x = F.relu(self.bn1(self.conv1(x)))
+        # C2
+        x = F.relu(self.bn2(self.conv2(x)))
+        # C3
+        x = F.relu(self.bn3(self.conv3(x)))
+        # C4
+        x = F.relu(self.bn4(self.conv4(x)))
+        # C4
+        x = F.relu(self.bn5(self.conv5(x)))
+
+        # Try get it to column vec
+
+        x = torch.flatten(x, 1)    # flatten all dimensions except the batch dimension
+        x = F.relu(self.bn6(self.fc1(x)))
+        x = F.relu(self.bn7(self.fc2(x)))
+
+        return self.fc3(x)
+
+    def save(self, PATH):
+        torch.save(self.state_dict(), PATH)
+
+    def load(self, PATH):
+        self.load_state_dict(torch.load(PATH))
