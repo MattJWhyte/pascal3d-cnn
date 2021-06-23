@@ -16,6 +16,9 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 def train_loop(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
+
+    model.train()
+
     for batch, (X, y) in enumerate(dataloader):
 
         X, y = X.to(device), y.to(device)
@@ -39,6 +42,8 @@ def test_loop(dataloader, model, loss_fn):
     size = len(dataloader.dataset)
     test_loss, correct, theta = 0.0, 0.0, []
     ct = 0.0
+
+    model.eval()
 
     with torch.no_grad():
         for X, y in dataloader:
@@ -73,7 +78,7 @@ model.to(device)
 loss_fn = nn.MSELoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.003)
 
-epochs = 50
+epochs = 1000
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train_loop(train_dataloader, model, loss_fn, optimizer)
