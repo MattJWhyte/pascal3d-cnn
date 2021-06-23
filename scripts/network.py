@@ -133,9 +133,9 @@ class Net3(nn.Module):
         # Downsample image more before model (128)
 
         # No more than 1024
-        self.fc1 = nn.Linear(3 * 3 * 16, 32)  # 5*5 from image dimension
-        self.bn5 = nn.BatchNorm1d(32, track_running_stats=False)
-        self.fc2 = nn.Linear(32, 3)
+        self.fc1 = nn.Linear(3 * 3 * 16, 16)  # 5*5 from image dimension
+        self.bn5 = nn.BatchNorm1d(16, track_running_stats=False)
+        self.fc2 = nn.Linear(16, 3)
 
     def forward(self, x):
         # C1
