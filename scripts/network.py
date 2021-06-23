@@ -68,8 +68,8 @@ class Net2(nn.Module):
         super(Net2, self).__init__()
         # Input 128 x 128
         self.conv1 = nn.Conv2d(3, 32, 21, stride=(2,2))
-        self.conv2 = nn.Conv2d(3, 64, 23, stride=(2, 2))
-        self.conv3 = nn.Conv2d(3, 128, 5, stride=(2, 2))
+        self.conv2 = nn.Conv2d(32, 64, 23, stride=(2, 2))
+        self.conv3 = nn.Conv2d(64, 128, 5, stride=(2, 2))
 
         # More channels , smaller convolutions
         # Use stride for convolutions instead of max pool
