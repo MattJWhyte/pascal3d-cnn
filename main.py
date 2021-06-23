@@ -95,7 +95,7 @@ val_set = PascalDataset(train=False)
 train_dataloader = DataLoader(train_set, batch_size=128)
 test_dataloader = DataLoader(val_set, batch_size=128)
 
-model = Net2()
+model = Net1()
 model.to(device)
 
 loss_fn = nn.MSELoss()

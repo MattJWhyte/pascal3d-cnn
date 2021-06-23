@@ -17,6 +17,14 @@ class Net1(nn.Module):
         self.conv6 = nn.Conv2d(256, 256, 3)
         self.conv7 = nn.Conv2d(256, 256, 3)
 
+        self.bn1 = nn.BatchNorm2d(32)
+        self.bn2 = nn.BatchNorm2d(64)
+        self.bn3 = nn.BatchNorm2d(64)
+        self.bn4 = nn.BatchNorm2d(128)
+        self.bn5 = nn.BatchNorm2d(256)
+        self.bn6 = nn.BatchNorm2d(256)
+        self.bn7 = nn.BatchNorm2d(256)
+
         # More channels , smaller convolutions
         # Use stride for convolutions instead of max pool
         # Downsample image more before model (128)
@@ -30,19 +38,19 @@ class Net1(nn.Module):
 
     def forward(self, x):
         # C1
-        x = F.relu(self.conv1(x))
+        x = F.relu(self.bn1(self.conv1(x)))
         # C2
-        x = F.relu(self.conv2(x))
+        x = F.relu(self.bn2(self.conv2(x)))
         # C3
-        x = F.relu(self.conv3(x))
+        x = F.relu(self.bn3(self.conv3(x)))
         # C4
-        x = F.relu(self.conv4(x))
+        x = F.relu(self.bn4(self.conv4(x)))
         # C5
-        x = F.relu(self.conv5(x))
+        x = F.relu(self.bn5(self.conv5(x)))
         # C6
-        x = F.relu(self.conv6(x))
+        x = F.relu(self.bn6(self.conv6(x)))
         # C7
-        x = F.relu(self.conv7(x))
+        x = F.relu(self.bn7(self.conv7(x)))
 
         # Try get it to column vec
 
