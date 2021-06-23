@@ -12,7 +12,7 @@ class Net1(nn.Module):
         self.conv1 = nn.Conv2d(3, 32, 7)
         self.conv2 = nn.Conv2d(32, 64, 7)
         self.conv3 = nn.Conv2d(64, 64, 5, stride=(2,2))
-        self.conv4 = nn.Conv2d(64, 128, 3, stride=(2, 2))
+        self.conv4 = nn.Conv2d(64, 128, 3, stride=(2,2))
         self.conv5 = nn.Conv2d(128, 256, 3)
         self.conv6 = nn.Conv2d(256, 256, 3)
 
@@ -40,8 +40,6 @@ class Net1(nn.Module):
         x = F.relu(self.conv5(x))
         # C6
         x = F.relu(self.conv6(x))
-
-        print(x.size)
 
         # Try get it to column vec
 
