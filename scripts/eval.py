@@ -101,8 +101,8 @@ def predict_model(pth, net):
         y = y.numpy()
         target = target.numpy()
 
-        _, pred_el, pred_az = distance_elevation_azimuth(y.aslist())
-        _, target_el, target_az = distance_elevation_azimuth(target.aslist())
+        _, pred_el, pred_az = distance_elevation_azimuth(y.tolist())
+        _, target_el, target_az = distance_elevation_azimuth(target.tolist())
         train_pred_el.append(pred_el)
         train_target_el.append(target_el)
         train_pred_az.append(pred_az)
@@ -125,8 +125,8 @@ def predict_model(pth, net):
         y = y.numpy()
         target = target.numpy()
 
-        _, pred_el, pred_az = distance_elevation_azimuth(y.aslist())
-        _, target_el, target_az = distance_elevation_azimuth(target.aslist())
+        _, pred_el, pred_az = distance_elevation_azimuth(y.tolist())
+        _, target_el, target_az = distance_elevation_azimuth(target.tolist())
         test_pred_el.append(pred_el)
         test_target_el.append(target_el)
         test_pred_az.append(pred_az)
