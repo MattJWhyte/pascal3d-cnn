@@ -82,7 +82,7 @@ def predict_model(pth, net):
         ax.plot([0, target[0]], [0, target[1]], [0, target[2]], "r-", label="Target")
         plt.legend()
         plt.savefig("results/predictions/"+img_name)
-        plt.clf()
+        plt.close()
 
     for i in range(len(test_dset)):
         y = nt(test_dset[i][0].unsqueeze().to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu().numpy()
