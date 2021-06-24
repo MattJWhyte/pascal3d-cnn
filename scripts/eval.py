@@ -1,10 +1,10 @@
 import os
 
 import numpy as np
-from dataset import PascalDataset
+from scripts.dataset import PascalDataset
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
-from network import *
+from scripts.network import *
 import torch
 
 # Python file for all evaluation metrics / graphics of nn against ground truth
