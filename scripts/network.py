@@ -215,9 +215,6 @@ class Net4(nn.Module):
         x = F.relu(self.bn4(self.conv4(x)))
         # C5
         x = F.relu(self.bn5(self.conv5(x)))
-
-        print(x.size)
-
         # Try get it to column vec
 
         x = torch.flatten(x, 1)    # flatten all dimensions except the batch dimension
