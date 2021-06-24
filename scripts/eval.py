@@ -75,14 +75,14 @@ def predict_model(pth, net):
     for i in range(len(train_dset)):
         y = nt(train_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
         img_name = train_dset.data[i].replace("/", "-")
-        target = train_dset[i][1]
+        target = train_dset[i][1].unsqueeze(0)
         theta = get_angle(y, target)
         y = y.numpy()
         target = target.numpy()
         plt.figure()
         ax = plt.axes(projection='3d')
         ax.plot([0,y[0,0]], [0,y[0,1]], [0,y[0,2]], "k-", label="Pred")
-        ax.plot([0, target[0]], [0, target[1]], [0, target[2]], "r-", label="Target")
+        ax.plot([0, target[0,0]], [0, target[0,1]], [0, target[0,2]], "r-", label="Target")
         plt.legend()
         plt.title("Angle = {}".format(theta))
         plt.savefig("results/predictions/"+img_name)
