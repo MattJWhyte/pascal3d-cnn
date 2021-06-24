@@ -20,6 +20,7 @@ def distance_elevation_azimuth(xyz):
         phi += 360.0
     return [np.sqrt(x**2+y**2+z**2), theta, phi]
 
+
 # Return angle between vectors
 def get_angle(y,target):
     y = y.numpy()
@@ -81,6 +82,11 @@ def predict_model(pth, net):
     train_pred_el = []
     train_target_el = []
 
+    test_pred_az = []
+    test_target_az = []
+    test_pred_el = []
+    test_target_el = []
+
     if not os.path.exists("results"):
         os.mkdir("results")
 
@@ -94,6 +100,14 @@ def predict_model(pth, net):
         theta = get_angle(y, target)
         y = y.numpy()
         target = target.numpy()
+
+        _, pred_el, pred_az = distance_elevation_azimuth(y.aslist())
+        _, target_el, target_az = distance_elevation_azimuth(target.aslist())
+        train_pred_el.append(pred_el)
+        train_target_el.append(target_el)
+        train_pred_az.append(pred_az)
+        train_target_az.append(target_az)
+
         plt.figure()
         ax = plt.axes(projection='3d')
         ax.plot([0,y[0,0]], [0,y[0,1]], [0,y[0,2]], "k-", label="Pred")
@@ -110,6 +124,14 @@ def predict_model(pth, net):
         theta = get_angle(y, target)
         y = y.numpy()
         target = target.numpy()
+
+        _, pred_el, pred_az = distance_elevation_azimuth(y.aslist())
+        _, target_el, target_az = distance_elevation_azimuth(target.aslist())
+        test_pred_el.append(pred_el)
+        test_target_el.append(target_el)
+        test_pred_az.append(pred_az)
+        test_target_az.append(target_az)
+
         plt.figure()
         ax = plt.axes(projection='3d')
         ax.plot([0,y[0]], [0,y[1]], [0,y[2]], "k-", label="Pred")
@@ -119,5 +141,14 @@ def predict_model(pth, net):
         plt.savefig("results/predictions/"+img_name)
         plt.clf()
 
+    l = [(train_pred_el,train_target_el),(train_pred_az,train_target_az),(test_pred_el,test_target_el),
+         (test_pred_az,test_target_az)]
+    t = ["Train Elevation","Train Azimuth","Test Elevation","Test Azimuth"]
+    for i in range(4):
+        plt.figure()
+        plt.scatter(l[i][1], l[i][0])
+        plt.xlabel("Target")
+        plt.ylabel("Pred")
+        plt.savefig("results/" + t[i].lower().replace(" ", "_") + ".png")
 
-# predict_model("models/pascal3d-vp-cnn-net1.pth", Net4)
+
