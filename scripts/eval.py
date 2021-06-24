@@ -95,7 +95,7 @@ def predict_model(pth, net):
     if not os.path.exists("results/predictions"):
         os.mkdir("results/predictions")
 
-    for i in range(100):
+    for i in range(10):
         y = nt(train_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
         img_name = train_dset.data[i].replace("/", "-")
         target = train_dset[i][1].unsqueeze(0)
@@ -119,7 +119,7 @@ def predict_model(pth, net):
         plt.savefig("results/predictions/"+img_name)
         plt.close()
 
-    for i in range(100):
+    for i in range(10):
         y = nt(test_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
         img_name = test_dset.data[i].replace("/", "-")
         target = test_dset[i][1].unsqueeze(0)
@@ -149,9 +149,10 @@ def predict_model(pth, net):
     for i in range(4):
         plt.figure()
         plt.scatter(l[i][1], l[i][0])
-        low = -180 if i % 2 == 0 else 0
-        plt.xlim(low, low+360)
-        plt.ylim(low, low+360)
+        low = -50 if i % 2 == 0 else 0
+        rn = 100 if i % 2 == 0 else 360
+        plt.xlim(low, low+rn)
+        plt.ylim(low, low+rn)
         plt.xlabel("Target")
         plt.ylabel("Pred")
         plt.savefig("results/" + t[i].lower().replace(" ", "_") + ".png")
