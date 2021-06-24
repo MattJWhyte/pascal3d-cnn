@@ -184,15 +184,15 @@ class Net4(nn.Module):
     def __init__(self):
         super(Net4, self).__init__()
         # Input 128 x 128
-        self.conv1 = nn.Conv2d(3, 4, 3, stride=(2,2))
+        self.conv1 = nn.Conv2d(3, 4, 3, stride=(2,2), padding=1)
         self.bn1 = nn.BatchNorm2d(4)
-        self.conv2 = nn.Conv2d(4, 8, 3, stride=(3, 3))
+        self.conv2 = nn.Conv2d(4, 8, 3, stride=(3, 3), padding=1)
         self.bn2 = nn.BatchNorm2d(8)
-        self.conv3 = nn.Conv2d(8, 16, 3, stride=(2, 2))
+        self.conv3 = nn.Conv2d(8, 16, 3, stride=(2, 2), padding=1)
         self.bn3 = nn.BatchNorm2d(16)
-        self.conv4 = nn.Conv2d(16, 16, 3, stride=(2, 2))
+        self.conv4 = nn.Conv2d(16, 16, 3, stride=(2, 2), padding=1)
         self.bn4 = nn.BatchNorm2d(16)
-        self.conv5 = nn.Conv2d(16, 16, 3, stride=(2, 2))
+        self.conv5 = nn.Conv2d(16, 16, 3, stride=(2, 2), padding=1)
         self.bn5 = nn.BatchNorm2d(16)
 
         # More channels , smaller convolutions
