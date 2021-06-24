@@ -93,7 +93,7 @@ train_set = PascalDataset()
 val_set = PascalDataset(train=False)
 
 train_dataloader = DataLoader(train_set, batch_size=128)
-test_dataloader = DataLoader(val_set, batch_size=128)
+test_dataloader = DataLoader(train_set, batch_size=128)
 
 model = Net2()
 model.to(device)
