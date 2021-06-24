@@ -129,7 +129,7 @@ def test_loop(dataloader, model, loss_fn):
 train_set = PascalDataset()
 val_set = PascalDataset(train=False)
 
-train_dataloader = DataLoader(train_set, batch_size=128)
+train_dataloader = DataLoader(train_set, batch_size=128, shuffle=True)
 test_dataloader = DataLoader(val_set, batch_size=128)
 
 model = Net2()
