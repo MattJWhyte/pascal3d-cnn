@@ -1,7 +1,6 @@
 import os
 
 import numpy as np
-import scripts.network
 from scripts.dataset import PascalDataset
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
