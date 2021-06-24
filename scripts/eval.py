@@ -141,7 +141,7 @@ def predict_model(pth, net):
         plt.legend()
         plt.title("Angle = {}".format(theta))
         plt.savefig("results/predictions/"+img_name)
-        plt.clf()
+        plt.close()
 
     l = [(train_pred_el,train_target_el),(train_pred_az,train_target_az),(test_pred_el,test_target_el),
          (test_pred_az,test_target_az)]
@@ -149,6 +149,9 @@ def predict_model(pth, net):
     for i in range(4):
         plt.figure()
         plt.scatter(l[i][1], l[i][0])
+        low = -180 if i % 2 == 0 else 0
+        plt.xlim(low, low+360)
+        plt.ylim(low, low+360)
         plt.xlabel("Target")
         plt.ylabel("Pred")
         plt.savefig("results/" + t[i].lower().replace(" ", "_") + ".png")
