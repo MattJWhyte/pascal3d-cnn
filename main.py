@@ -7,7 +7,7 @@ from torch.utils.data import Dataset, DataLoader
 import torch.nn.functional as F
 from torchvision import datasets
 from torchvision.transforms import ToTensor
-from scripts.network import Net1, Net2, Net3
+from scripts.network import *
 from scripts.dataset import PascalDataset
 from scripts.eval import thirty_deg_accuracy, get_angle
 
@@ -95,7 +95,7 @@ val_set = PascalDataset(train=False)
 train_dataloader = DataLoader(train_set, batch_size=128)
 test_dataloader = DataLoader(val_set, batch_size=128)
 
-model = Net3()
+model = Net4()
 model.to(device)
 
 loss_fn = nn.MSELoss()
