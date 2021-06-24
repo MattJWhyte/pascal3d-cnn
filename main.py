@@ -149,8 +149,9 @@ for t in range(epochs):
     plt.plot([i for i in range(1, t + 2)], train_loss_ls, 'r--', label="Train loss")
     plt.plot([i for i in range(1, t + 2)], test_acc_ls, 'b-', label="Test acc.")
     plt.plot([i for i in range(1, t + 2)], test_loss_ls, 'b--', label="Test loss")
+    '''
     plt.plot([i for i in range(1, t + 2)], train_acc_test_ls, 'g-', label="Test in train acc.")
-    plt.plot([i for i in range(1, t + 2)], train_loss_test_ls, 'g--', label="Test in train loss")
+    plt.plot([i for i in range(1, t + 2)], train_loss_test_ls, 'g--', label="Test in train loss")'''
     plt.legend()
     plt.xlabel("Epoch")
     plt.savefig("training.png")
