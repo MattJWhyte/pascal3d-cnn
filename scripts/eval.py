@@ -89,6 +89,9 @@ def predict_model(pth, net):
     test_pred_el = []
     test_target_el = []
 
+    test_acc = 0.0
+    train_acc = 0.0
+
     if not os.path.exists("results"):
         os.mkdir("results")
 
@@ -100,6 +103,7 @@ def predict_model(pth, net):
         img_name = train_dset.data[i].replace("/", "-")
         target = train_dset[i][1].unsqueeze(0)
         theta = get_angle(y, target)
+        train_acc += thirty_deg_accuracy(y, target)
         y = y.numpy()
         target = target.numpy()
 
@@ -109,8 +113,6 @@ def predict_model(pth, net):
         train_target_el.append(target_el)
         train_pred_az.append(pred_az)
         train_target_az.append(target_az)
-
-        print("Train {}".format(i))
         '''
         plt.figure()
         ax = plt.axes(projection='3d')
@@ -121,11 +123,14 @@ def predict_model(pth, net):
         plt.savefig("results/predictions/"+img_name)
         plt.close()'''
 
+    print("TRAIN ACCURACY: {}".format(train_acc/len(train_dset)))
+
     for i in range(len(test_dset)):
         y = nt(test_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
         img_name = test_dset.data[i].replace("/", "-")
         target = test_dset[i][1].unsqueeze(0)
         theta = get_angle(y, target)
+        test_acc += thirty_deg_accuracy(y, target)
         y = y.numpy()
         target = target.numpy()
 
@@ -136,8 +141,6 @@ def predict_model(pth, net):
         test_pred_az.append(pred_az)
         test_target_az.append(target_az)
 
-        print("Test {}".format(i))
-
         '''
         plt.figure()
         ax = plt.axes(projection='3d')
@@ -147,6 +150,8 @@ def predict_model(pth, net):
         plt.title("Angle = {}".format(theta))
         plt.savefig("results/predictions/"+img_name)
         plt.close()'''
+
+    print("TEST ACCURACY: {}".format(test_acc / len(test_dset)))
 
     l = [(train_pred_el,train_target_el),(train_pred_az,train_target_az),(test_pred_el,test_target_el),
          (test_pred_az,test_target_az)]
