@@ -159,7 +159,7 @@ def predict_model(pth, net):
     for i in range(4):
         plt.figure()
         plt.scatter(l[i][1], l[i][0], s=5)
-        low = -100 if i % 2 == 0 else 0
+        low = -100 if i % 2 == 0 else -180
         rn = 200 if i % 2 == 0 else 360
         plt.xlim(low, low+rn)
         plt.ylim(low, low+rn)
