@@ -154,3 +154,4 @@ def predict_model(pth, net):
         plt.savefig("results/" + t[i].lower().replace(" ", "_") + ".png")
 
 
+
