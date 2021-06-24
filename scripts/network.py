@@ -190,9 +190,9 @@ class Net4(nn.Module):
         self.bn2 = nn.BatchNorm2d(8)
         self.conv3 = nn.Conv2d(8, 16, 3, stride=(2, 2))
         self.bn3 = nn.BatchNorm2d(16)
-        self.conv4 = nn.Conv2d(8, 16, 3, stride=(2, 2))
+        self.conv4 = nn.Conv2d(16, 16, 3, stride=(2, 2))
         self.bn4 = nn.BatchNorm2d(16)
-        self.conv5 = nn.Conv2d(8, 16, 3, stride=(2, 2))
+        self.conv5 = nn.Conv2d(16, 16, 3, stride=(2, 2))
         self.bn5 = nn.BatchNorm2d(16)
 
         # More channels , smaller convolutions
