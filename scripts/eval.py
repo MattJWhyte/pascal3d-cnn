@@ -110,6 +110,8 @@ def predict_model(pth, net):
         train_pred_az.append(pred_az)
         train_target_az.append(target_az)
 
+        print("Train {}".format(i))
+        '''
         plt.figure()
         ax = plt.axes(projection='3d')
         ax.plot([0,y[0,0]], [0,y[0,1]], [0,y[0,2]], "k-", label="Pred")
@@ -117,7 +119,7 @@ def predict_model(pth, net):
         plt.legend()
         plt.title("Angle = {}".format(theta))
         plt.savefig("results/predictions/"+img_name)
-        plt.close()
+        plt.close()'''
 
     for i in range(len(test_dset)):
         y = nt(test_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
@@ -134,6 +136,9 @@ def predict_model(pth, net):
         test_pred_az.append(pred_az)
         test_target_az.append(target_az)
 
+        print("Test {}".format(i))
+
+        '''
         plt.figure()
         ax = plt.axes(projection='3d')
         ax.plot([0,y[0,0]], [0,y[0,1]], [0,y[0,2]], "k-", label="Pred")
@@ -141,7 +146,7 @@ def predict_model(pth, net):
         plt.legend()
         plt.title("Angle = {}".format(theta))
         plt.savefig("results/predictions/"+img_name)
-        plt.close()
+        plt.close()'''
 
     l = [(train_pred_el,train_target_el),(train_pred_az,train_target_az),(test_pred_el,test_target_el),
          (test_pred_az,test_target_az)]
