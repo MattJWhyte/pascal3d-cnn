@@ -66,10 +66,10 @@ def predict_model(pth, net):
     train_dset = PascalDataset()
     test_dset = PascalDataset(train=False)
 
-    if os.path.exists("results"):
+    if not os.path.exists("results"):
         os.mkdir("results")
 
-    if os.path.exists("results/predictions"):
+    if not os.path.exists("results/predictions"):
         os.mkdir("results/predictions")
 
     for i in range(len(train_dset)):
