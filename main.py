@@ -26,20 +26,21 @@ def train_loop(dataloader, model, loss_fn, optimizer):
     ct = 0.0
 
     model.train()
+    torch.no_grad = optimizer is None
 
     for batch, (X, y) in enumerate(dataloader):
         ct += 1
         X, y = X.to(device), y.to(device)
 
-        optimizer.zero_grad()
-
         # Compute prediction and loss
         pred = model(X)
         loss = loss_fn(pred, y)
 
-        # Backpropagation
-        loss.backward()
-        optimizer.step()
+        if optimizer is not None:
+            # Backpropagation
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
         pred = pred.detach().cpu()
         y = y.detach().cpu()
@@ -93,7 +94,7 @@ train_set = PascalDataset()
 val_set = PascalDataset(train=False)
 
 train_dataloader = DataLoader(train_set, batch_size=128)
-test_dataloader = DataLoader(train_set, batch_size=128)
+test_dataloader = DataLoader(val_set, batch_size=128)
 
 model = Net2()
 model.to(device)
@@ -105,6 +106,7 @@ epochs = 1000
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train_loop(train_dataloader, model, loss_fn, optimizer)
+    train_loop(test_dataloader, model, loss_fn, None)
     test_loop(test_dataloader, model, loss_fn)
     model.save("models/pascal3d-vp-cnn-net2.pth")
     plt.plot([i for i in range(1,t+2)], train_acc_ls, 'r-', label="Train acc.")
