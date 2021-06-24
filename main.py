@@ -65,7 +65,7 @@ def test_loop(dataloader, model, loss_fn):
     test_loss, correct, theta = 0.0, 0.0, []
     ct = 0.0
 
-    model.eval()
+    model.train()
 
     with torch.no_grad():
         for X, y in dataloader:
@@ -105,7 +105,6 @@ epochs = 1000
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train_loop(train_dataloader, model, loss_fn, optimizer)
-    train_loop(test_dataloader, model, loss_fn, None)
     test_loop(test_dataloader, model, loss_fn)
     model.save("models/pascal3d-vp-cnn-net2.pth")
     plt.plot([i for i in range(1,t+2)], train_acc_ls, 'r-', label="Train acc.")
