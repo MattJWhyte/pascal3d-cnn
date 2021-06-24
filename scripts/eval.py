@@ -153,7 +153,7 @@ def predict_model(pth, net):
     t = ["Train Elevation","Train Azimuth","Test Elevation","Test Azimuth"]
     for i in range(4):
         plt.figure()
-        plt.scatter(l[i][1], l[i][0])
+        plt.scatter(l[i][1], l[i][0], s=5)
         low = -50 if i % 2 == 0 else 0
         rn = 180 if i % 2 == 0 else 360
         plt.xlim(low, low+rn)
