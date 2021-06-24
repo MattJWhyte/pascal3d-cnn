@@ -26,7 +26,6 @@ def train_loop(dataloader, model, loss_fn, optimizer):
     ct = 0.0
 
     model.train()
-    torch.no_grad = optimizer is None
 
     for batch, (X, y) in enumerate(dataloader):
         ct += 1
