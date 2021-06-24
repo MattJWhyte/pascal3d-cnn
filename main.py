@@ -130,8 +130,8 @@ train_set = PascalDataset()
 val_set = PascalDataset(train=False)
 
 train_dataloader = DataLoader(train_set, batch_size=128, shuffle=True)
-train_no_shuffle_dataloader = DataLoader(train_set, batch_size=128)
-test_dataloader = DataLoader(val_set, batch_size=128)
+train_no_shuffle_dataloader = DataLoader(train_set, batch_size=128, shuffle=True)
+test_dataloader = DataLoader(val_set, batch_size=128, shuffle=True)
 
 model = Net2()
 model.to(device)
@@ -143,8 +143,8 @@ epochs = 1000
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train_loop(train_dataloader, model, loss_fn, optimizer)
-    train_loop_test(train_no_shuffle_dataloader, model, loss_fn)
-    test_loop(train_no_shuffle_dataloader, model, loss_fn)
+    train_loop_test(test_dataloader, model, loss_fn)
+    test_loop(test_dataloader, model, loss_fn)
     model.save("models/pascal3d-vp-cnn-net2.pth")
     plt.plot([i for i in range(1,t+2)], train_acc_ls, 'r-', label="Train acc.")
     plt.plot([i for i in range(1, t + 2)], train_loss_ls, 'r--', label="Train loss")
