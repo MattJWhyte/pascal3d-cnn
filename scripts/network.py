@@ -218,8 +218,8 @@ class Net4(nn.Module):
         # Try get it to column vec
 
         x = torch.flatten(x, 1)    # flatten all dimensions except the batch dimension
-        x = F.relu(self.bn6(self.fc1(x)))
-        x = self.fc2(x)
+        x = F.silu(self.bn6(self.fc1(x)))
+        x = F.silu(self.fc2(x))
 
         return x
 
