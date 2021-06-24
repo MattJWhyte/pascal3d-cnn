@@ -115,26 +115,7 @@ class Net2(nn.Module):
     def load(self, PATH):
         self.load_state_dict(torch.load(PATH))
 
-'''
 
-128 x 128
-|
-126
-63
-|
-61
-31
-|
-29
-15
-|
-13
-7
-|
-5
-3
-
-'''
 class Net3(nn.Module):
 
     def __init__(self):
