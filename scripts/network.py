@@ -201,7 +201,7 @@ class Net4(nn.Module):
 
         # No more than 1024
         self.fc1 = nn.Linear(3 * 3 * 16, 16)  # 5*5 from image dimension
-        self.bn6 = nn.BatchNorm1d(16, track_running_stats=False)
+        self.bn6 = nn.BatchNorm1d(16)
         self.fc2 = nn.Linear(16, 3)
 
     def forward(self, x):
@@ -215,6 +215,8 @@ class Net4(nn.Module):
         x = F.relu(self.bn4(self.conv4(x)))
         # C5
         x = F.relu(self.bn5(self.conv5(x)))
+
+        print(x.size)
 
         # Try get it to column vec
 
