@@ -95,7 +95,7 @@ def predict_model(pth, net):
     if not os.path.exists("results/predictions"):
         os.mkdir("results/predictions")
 
-    for i in range(10):
+    for i in range(len(train_dset)):
         y = nt(train_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
         img_name = train_dset.data[i].replace("/", "-")
         target = train_dset[i][1].unsqueeze(0)
@@ -119,7 +119,7 @@ def predict_model(pth, net):
         plt.savefig("results/predictions/"+img_name)
         plt.close()
 
-    for i in range(10):
+    for i in range(len(test_dset)):
         y = nt(test_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
         img_name = test_dset.data[i].replace("/", "-")
         target = test_dset[i][1].unsqueeze(0)
@@ -150,7 +150,7 @@ def predict_model(pth, net):
         plt.figure()
         plt.scatter(l[i][1], l[i][0])
         low = -50 if i % 2 == 0 else 0
-        rn = 100 if i % 2 == 0 else 360
+        rn = 180 if i % 2 == 0 else 360
         plt.xlim(low, low+rn)
         plt.ylim(low, low+rn)
         plt.xlabel("Target")
