@@ -11,9 +11,9 @@ import torch
 
 
 def distance_elevation_azimuth(xyz):
-    x = xyz[0,0]
-    y = xyz[0,1]
-    z = xyz[0,2]
+    x = xyz[:,0]
+    y = xyz[:,1]
+    z = xyz[:,2]
     theta = np.abs(90-np.rad2deg(np.arccos(z / np.sqrt(x ** 2 + y ** 2 + z ** 2))))
     if z < 0:
         theta *= -1.0
@@ -111,8 +111,8 @@ def predict_model(pth, net):
         _, target_el, target_az = distance_elevation_azimuth(target)
         train_pred_el.append(pred_el)
         train_target_el.append(target_el)
-        train_pred_az.append(pred_az)
-        train_target_az.append(target_az)
+        train_pred_az.append(pred_az-180.0)
+        train_target_az.append(target_az-180.0)
         '''
         plt.figure()
         ax = plt.axes(projection='3d')
@@ -138,8 +138,8 @@ def predict_model(pth, net):
         _, target_el, target_az = distance_elevation_azimuth(target)
         test_pred_el.append(pred_el)
         test_target_el.append(target_el)
-        test_pred_az.append(pred_az)
-        test_target_az.append(target_az)
+        test_pred_az.append(pred_az-180.0)
+        test_target_az.append(target_az-180.0)
 
         '''
         plt.figure()
