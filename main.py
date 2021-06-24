@@ -142,7 +142,7 @@ epochs = 1000
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train_loop(train_dataloader, model, loss_fn, optimizer)
-    train_loop_test(train_dataloader, model, loss_fn)
+    train_loop_test(test_dataloader, model, loss_fn)
     test_loop(test_dataloader, model, loss_fn)
     model.save("models/pascal3d-vp-cnn-net2.pth")
     plt.plot([i for i in range(1,t+2)], train_acc_ls, 'r-', label="Train acc.")
