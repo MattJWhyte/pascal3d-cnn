@@ -73,7 +73,7 @@ def predict_model(pth, net):
         os.mkdir("results/predictions")
 
     for i in range(len(train_dset)):
-        y = nt(train_dset[i][0].unsqueeze(0)).numpy()
+        y = nt(train_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).numpy()
         img_name = train_dset.labels[i].replace("/", "-")
         target = train_dset[i][1].numpy()
         plt.figure()
@@ -85,7 +85,7 @@ def predict_model(pth, net):
         plt.clf()
 
     for i in range(len(test_dset)):
-        y = nt(test_dset[i][0].unsqueeze()).numpy()
+        y = nt(test_dset[i][0].unsqueeze().to('cuda' if torch.cuda.is_available() else "cpu")).numpy()
         img_name = test_dset.labels[i].replace("/", "-")
         target = test_dset[i][1].numpy()
         plt.figure()
