@@ -131,9 +131,9 @@ val_set = PascalDataset(train=False)
 
 train_dataloader = DataLoader(train_set, batch_size=128, shuffle=True)
 train_no_shuffle_dataloader = DataLoader(train_set, batch_size=128, shuffle=True)
-test_dataloader = DataLoader(val_set, batch_size=128, shuffle=True)
+test_dataloader = DataLoader(val_set, batch_size=128)
 
-model = Net2()
+model = Net4()
 model.to(device)
 
 loss_fn = nn.MSELoss()
@@ -145,7 +145,7 @@ for t in range(epochs):
     train_loop(train_dataloader, model, loss_fn, optimizer)
     train_loop_test(test_dataloader, model, loss_fn)
     test_loop(test_dataloader, model, loss_fn)
-    model.save("models/pascal3d-vp-cnn-net2.pth")
+    model.save("models/pascal3d-vp-cnn-net4.pth")
     plt.plot([i for i in range(1,t+2)], train_acc_ls, 'r-', label="Train acc.")
     plt.plot([i for i in range(1, t + 2)], train_loss_ls, 'r--', label="Train loss")
     plt.plot([i for i in range(1, t + 2)], test_acc_ls, 'b-', label="Test acc.")
