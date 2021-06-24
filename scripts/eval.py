@@ -79,7 +79,7 @@ def predict_model(pth, net):
         plt.figure()
         ax = plt.axes(projection='3d')
         ax.plot([0,y[0,0]], [0,y[0,1]], [0,y[0,2]], "k-", label="Pred")
-        ax.plot([0, target[0,0]], [0, target[0,1]], [0, target[0,2]], "r-", label="Target")
+        ax.plot([0, target[0]], [0, target[1]], [0, target[2]], "r-", label="Target")
         plt.legend()
         plt.savefig("results/predictions/"+img_name)
         plt.clf()
