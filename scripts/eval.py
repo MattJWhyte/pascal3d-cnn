@@ -10,6 +10,16 @@ import torch
 # Python file for all evaluation metrics / graphics of nn against ground truth
 
 
+def distance_elevation_azimuth(xyz):
+    x,y,z = xyz
+    theta = np.abs(90-np.rad2deg(np.arccos(z / np.sqrt(x ** 2 + y ** 2 + z ** 2))))
+    if z < 0:
+        theta *= -1.0
+    phi = np.rad2deg(np.arctan2(y,x))
+    if phi < 0.0:
+        phi += 360.0
+    return [np.sqrt(x**2+y**2+z**2), theta, phi]
+
 # Return angle between vectors
 def get_angle(y,target):
     y = y.numpy()
@@ -66,13 +76,18 @@ def predict_model(pth, net):
     train_dset = PascalDataset()
     test_dset = PascalDataset(train=False)
 
+    train_pred_az = []
+    train_target_az = []
+    train_pred_el = []
+    train_target_el = []
+
     if not os.path.exists("results"):
         os.mkdir("results")
 
     if not os.path.exists("results/predictions"):
         os.mkdir("results/predictions")
 
-    for i in range(len(train_dset)):
+    for i in range(100):
         y = nt(train_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
         img_name = train_dset.data[i].replace("/", "-")
         target = train_dset[i][1].unsqueeze(0)
@@ -88,10 +103,10 @@ def predict_model(pth, net):
         plt.savefig("results/predictions/"+img_name)
         plt.close()
 
-    for i in range(len(test_dset)):
-        y = nt(test_dset[i][0].unsqueeze().to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
+    for i in range(100):
+        y = nt(test_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
         img_name = test_dset.data[i].replace("/", "-")
-        target = test_dset[i][1]
+        target = test_dset[i][1].unsqueeze(0)
         theta = get_angle(y, target)
         y = y.numpy()
         target = target.numpy()
@@ -105,4 +120,4 @@ def predict_model(pth, net):
         plt.clf()
 
 
-predict_model("models/pascal3d-vp-cnn-net1.pth", Net4)
+# predict_model("models/pascal3d-vp-cnn-net1.pth", Net4)
