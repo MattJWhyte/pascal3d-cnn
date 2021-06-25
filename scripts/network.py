@@ -33,7 +33,7 @@ class Net1(nn.Module):
         self.fc1 = nn.Linear(4 * 4 * 256, 128)  # 5*5 from image dimension
         self.fc2 = nn.Linear(128, 3)
 
-        self.fc1_bn1 = nn.BatchNorm2d(128)
+        self.fc1_bn1 = nn.BatchNorm1d(128)
 
     def forward(self, x):
         # C1
