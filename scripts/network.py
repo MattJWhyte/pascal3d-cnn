@@ -30,12 +30,16 @@ class Net1(nn.Module):
         # Downsample image more before model (128)
 
         # No more than 1024
-        self.fc1 = nn.Linear(4 * 4 * 256, 128)
-        self.fc2 = nn.Linear(128, 64)
-        self.fc3 = nn.Linear(64, 3)
+        self.fc1 = nn.Linear(4 * 4 * 256, 256)
+        self.fc2 = nn.Linear(256, 128)
+        self.fc3 = nn.Linear(128, 64)
+        self.fc4 = nn.Linear(64, 32)
+        self.fc5 = nn.Linear(32, 3)
 
-        self.fc1_bn = nn.BatchNorm1d(128)
-        self.fc2_bn = nn.BatchNorm1d(64)
+        self.fc1_bn = nn.BatchNorm1d(256)
+        self.fc2_bn = nn.BatchNorm1d(128)
+        self.fc3_bn = nn.BatchNorm1d(64)
+        self.fc4_bn = nn.BatchNorm1d(32)
 
 
     def forward(self, x):
@@ -59,8 +63,10 @@ class Net1(nn.Module):
         x = torch.flatten(x, 1)    # flatten all dimensions except the batch dimension
         x = F.relu(self.fc1_bn(self.fc1(x)))
         x = F.relu(self.fc2_bn(self.fc2(x)))
+        x = F.relu(self.fc3_bn(self.fc3(x)))
+        x = F.relu(self.fc4_bn(self.fc4(x)))
 
-        return self.fc3(x)
+        return self.fc5(x)
 
     def save(self, PATH):
         torch.save(self.state_dict(), PATH)
