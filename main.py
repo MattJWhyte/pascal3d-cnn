@@ -135,6 +135,7 @@ test_dataloader = DataLoader(val_set, batch_size=128)
 
 model = Net5()
 model.to(device)
+name = type(model).__name__.lower()
 
 loss_fn = nn.MSELoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.003)
@@ -144,7 +145,7 @@ for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train_loop(train_dataloader, model, loss_fn, optimizer)
     test_loop(test_dataloader, model, loss_fn)
-    model.save("models/pascal3d-vp-cnn-net5.pth")
+    model.save("models/pascal3d-vp-cnn-"+name+".pth")
     plt.plot([i for i in range(1,t+2)], train_acc_ls, 'r-', label="Train acc.")
     plt.plot([i for i in range(1, t + 2)], train_loss_ls, 'r--', label="Train loss")
     plt.plot([i for i in range(1, t + 2)], test_acc_ls, 'b-', label="Test acc.")
@@ -154,6 +155,6 @@ for t in range(epochs):
     plt.plot([i for i in range(1, t + 2)], train_loss_test_ls, 'g--', label="Test in train loss")'''
     plt.legend()
     plt.xlabel("Epoch")
-    plt.savefig("training-net5.png")
+    plt.savefig("training-"+name+".png")
     plt.clf()
 

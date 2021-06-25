@@ -157,14 +157,14 @@ def predict_model(pth, net):
     fig = plt.figure()
     ax2 = fig.add_subplot(1, 1, 1, projection="polar")
     train_el_diff = [train_pred_el[i]-train_target_el[i] for i in range(len(train_pred_el))]
-    ax2.scatter(train_pred_az, train_el_diff, cmap="hsv", c=train_target_az)
+    ax2.scatter(train_pred_az, train_el_diff, cmap="hsv", c=train_target_az, s=5)
     plt.savefig("results/train.png")
     plt.close(fig)
 
     fig = plt.figure()
     ax2 = fig.add_subplot(1, 1, 1, projection="polar")
     test_el_diff = [test_pred_el[i] - test_target_el[i] for i in range(len(test_pred_el))]
-    ax2.scatter(test_pred_az, test_el_diff, cmap="hsv", c=test_target_az)
+    ax2.scatter(test_pred_az, test_el_diff, cmap="hsv", c=test_target_az, s=5)
     plt.savefig("results/test.png")
     plt.close(fig)
 
