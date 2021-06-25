@@ -163,7 +163,7 @@ def predict_model(pth, net, net_name):
     fig = plt.figure()
     ax2 = fig.add_subplot(1, 1, 1, projection="polar")
     train_el_diff = [train_pred_el[i]-train_target_el[i] for i in range(len(train_pred_el))]
-    ax2.scatter(train_pred_az, train_el_diff, color=[cmap(t/360.0) for t in train_target_az], s=2)
+    ax2.scatter(train_pred_az, train_el_diff, cmap='hsv', c=[t/360.0 for t in train_target_az], s=2)
     plt.savefig(pt + "train.png")
     plt.close(fig)
 
