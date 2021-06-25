@@ -61,10 +61,10 @@ class Net1(nn.Module):
         # Try get it to column vec
 
         x = torch.flatten(x, 1)    # flatten all dimensions except the batch dimension
-        x = F.relu(self.fc1_bn(self.fc1(x)))
-        x = F.relu(self.fc2_bn(self.fc2(x)))
-        x = F.relu(self.fc3_bn(self.fc3(x)))
-        x = F.relu(self.fc4_bn(self.fc4(x)))
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = F.relu(self.fc3(x))
+        x = F.relu(self.fc4(x))
 
         return self.fc5(x)
 
