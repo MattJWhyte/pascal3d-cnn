@@ -4,6 +4,7 @@ import numpy as np
 from scripts.dataset import PascalDataset
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 from scripts.network import *
 import torch
 
@@ -111,8 +112,8 @@ def predict_model(pth, net):
         _, target_el, target_az = distance_elevation_azimuth(target)
         train_pred_el.append(pred_el)
         train_target_el.append(target_el)
-        train_pred_az.append(pred_az-180.0)
-        train_target_az.append(target_az-180.0)
+        train_pred_az.append(pred_az)
+        train_target_az.append(target_az)
         '''
         plt.figure()
         ax = plt.axes(projection='3d')
@@ -138,8 +139,8 @@ def predict_model(pth, net):
         _, target_el, target_az = distance_elevation_azimuth(target)
         test_pred_el.append(pred_el)
         test_target_el.append(target_el)
-        test_pred_az.append(pred_az-180.0)
-        test_target_az.append(target_az-180.0)
+        test_pred_az.append(pred_az)
+        test_target_az.append(target_az)
 
         '''
         plt.figure()
@@ -152,6 +153,20 @@ def predict_model(pth, net):
         plt.close()'''
 
     print("TEST ACCURACY: {}".format(test_acc / len(test_dset)))
+
+    fig = plt.figure()
+    ax2 = fig.add_subplot(1, 1, 1, projection="polar")
+    train_el_diff = [train_pred_el[i]-train_target_el[i] for i in range(len(train_pred_el))]
+    ax2.scatter(train_pred_az, train_el_diff, cmap="hsv", c=train_target_az)
+    plt.savefig("results/train.png")
+    plt.close(fig)
+
+    fig = plt.figure()
+    ax2 = fig.add_subplot(1, 1, 1, projection="polar")
+    test_el_diff = [test_pred_el[i] - test_target_el[i] for i in range(len(test_pred_el))]
+    ax2.scatter(test_pred_az, test_el_diff, cmap="hsv", c=test_target_az)
+    plt.savefig("results/test.png")
+    plt.close(fig)
 
     l = [(train_pred_el,train_target_el),(train_pred_az,train_target_az),(test_pred_el,test_target_el),
          (test_pred_az,test_target_az)]
