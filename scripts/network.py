@@ -265,3 +265,12 @@ class Net5(nn.Module):
 
     def load(self, PATH):
         self.load_state_dict(torch.load(PATH))
+
+
+MODEL = {
+    "net1": Net1,
+    "net2": Net2,
+    "net3": Net3,
+    "net4": Net4,
+    "net5": Net5,
+}
