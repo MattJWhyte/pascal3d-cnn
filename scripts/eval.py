@@ -71,7 +71,7 @@ def evaluate_model(pth, net):
     return acc/ct, np.median(np.array(theta))
 
 
-def predict_model(pth, net):
+def predict_model(pth, net, net_name):
     # Load model
     nt = net()
     nt.load(pth)
@@ -96,8 +96,10 @@ def predict_model(pth, net):
     if not os.path.exists("results"):
         os.mkdir("results")
 
-    if not os.path.exists("results/predictions"):
-        os.mkdir("results/predictions")
+    if not os.path.exists("results/"+net_name):
+        os.mkdir("results/"+net_name)
+
+    pt = "results/" + net_name + "/"
 
     for i in range(len(train_dset)):
         y = nt(train_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
@@ -158,14 +160,14 @@ def predict_model(pth, net):
     ax2 = fig.add_subplot(1, 1, 1, projection="polar")
     train_el_diff = [train_pred_el[i]-train_target_el[i] for i in range(len(train_pred_el))]
     ax2.scatter(train_pred_az, train_el_diff, cmap="hsv", c=train_target_az, s=5)
-    plt.savefig("results/train.png")
+    plt.savefig(pt + "train.png")
     plt.close(fig)
 
     fig = plt.figure()
     ax2 = fig.add_subplot(1, 1, 1, projection="polar")
     test_el_diff = [test_pred_el[i] - test_target_el[i] for i in range(len(test_pred_el))]
     ax2.scatter(test_pred_az, test_el_diff, cmap="hsv", c=test_target_az, s=5)
-    plt.savefig("results/test.png")
+    plt.savefig(pt + "test.png")
     plt.close(fig)
 
     l = [(train_pred_el,train_target_el),(train_pred_az,train_target_az),(test_pred_el,test_target_el),
@@ -180,7 +182,7 @@ def predict_model(pth, net):
         plt.ylim(low, low+rn)
         plt.xlabel("Target")
         plt.ylabel("Pred")
-        plt.savefig("results/" + t[i].lower().replace(" ", "_") + ".png")
+        plt.savefig(pt + t[i].lower().replace(" ", "_") + ".png")
 
 
 
