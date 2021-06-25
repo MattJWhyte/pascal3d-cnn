@@ -134,7 +134,7 @@ train_dataloader = DataLoader(train_set, batch_size=128, shuffle=True)
 train_no_shuffle_dataloader = DataLoader(train_set, batch_size=128, shuffle=True)
 test_dataloader = DataLoader(val_set, batch_size=128)
 
-model = MODEL[sys.argv[0]]()
+model = MODEL[sys.argv[2]]()
 model.to(device)
 name = type(model).__name__.lower()
 
