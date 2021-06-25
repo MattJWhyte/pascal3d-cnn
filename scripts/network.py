@@ -219,7 +219,7 @@ class Net4(nn.Module):
 class Net5(nn.Module):
 
     def __init__(self):
-        super(Net4, self).__init__()
+        super(Net5, self).__init__()
         # Input 128 x 128
         self.conv1 = nn.Conv2d(3, 32, 3, stride=(2,2), padding=1)
         self.bn1 = nn.BatchNorm2d(32)
