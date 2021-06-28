@@ -2,6 +2,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torchvision
 
 
 class Net1(nn.Module):
@@ -267,10 +268,34 @@ class Net5(nn.Module):
         self.load_state_dict(torch.load(PATH))
 
 
+class vgg_pose(nn.Module):
+
+    def __init__(self):
+        super(vgg_pose, self).__init__()
+        self.features = torchvision.models.vgg16(pretrained=True).features.eval()
+        self.net = nn.Sequential(nn.Conv2d(512, 512, 5),
+                                 nn.ReLU(),
+                                 nn.Conv2d(512, 512, 3),
+                                 nn.ReLU(),
+                                 nn.Conv2d(512, 3, 1),)
+        self.register_buffer("mean", torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1))
+        self.register_buffer("std", torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1))
+
+    def forward(self, input_tensor):
+        x = input_tensor
+        x = x - self.mean
+        x = x / self.std
+        with torch.no_grad():
+            x = self.features(x)
+        x = self.net(x.detach())
+        return x
+
+
 MODEL = {
     "net1": Net1,
     "net2": Net2,
     "net3": Net3,
     "net4": Net4,
     "net5": Net5,
+    "vgg_pose": vgg_pose
 }

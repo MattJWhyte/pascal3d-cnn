@@ -9,7 +9,7 @@ import torch.nn.functional as F
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 from scripts.network import *
-from scripts.dataset import PascalDataset
+from scripts.dataset import PascalDataset, RawPascalDataset
 from scripts.eval import thirty_deg_accuracy, get_angle
 
 
@@ -127,7 +127,7 @@ def test_loop(dataloader, model, loss_fn):
     test_acc_ls.append(correct/ct)
 
 
-train_set = PascalDataset()
+train_set = RawPascalDataset((128,128))
 val_set = PascalDataset(train=False)
 
 train_dataloader = DataLoader(train_set, batch_size=128, shuffle=True)
