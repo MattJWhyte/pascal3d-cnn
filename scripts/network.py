@@ -290,7 +290,7 @@ class vgg_pose(nn.Module):
         x = x / self.std
         with torch.no_grad():
             x = self.features(x)
-        x = self.net(x.detach())
+        x = self.net(x.detach()).squeeze()
         print(x.shape)
         return x
 
