@@ -67,6 +67,7 @@ class Net1(nn.Module):
         x = F.relu(self.fc3_bn(self.fc3(x)))
         x = F.relu(self.fc4_bn(self.fc4(x)))
 
+        print(x.shape)
         return self.fc5(x)
 
     def save(self, PATH):

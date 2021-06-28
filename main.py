@@ -127,14 +127,19 @@ def test_loop(dataloader, model, loss_fn):
     test_acc_ls.append(correct/ct)
 
 
-train_set = RawPascalDataset((224,224))
-val_set = RawPascalDataset((224,224), train=False)
+# Get CLI args
+model_name = sys.argv[1].lower()
+width = int(sys.argv[2])
+height = int(sys.argv[3])
+
+train_set = RawPascalDataset((width,height))
+val_set = RawPascalDataset((width,height), train=False)
 
 train_dataloader = DataLoader(train_set, batch_size=128, shuffle=True)
 train_no_shuffle_dataloader = DataLoader(train_set, batch_size=128, shuffle=True)
 test_dataloader = DataLoader(val_set, batch_size=128)
 
-model = MODEL[sys.argv[1].lower()]()
+model = MODEL[model_name]()
 model.to(device)
 name = type(model).__name__.lower()
 
