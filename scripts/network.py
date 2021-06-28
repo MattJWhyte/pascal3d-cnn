@@ -68,8 +68,6 @@ class Net1(nn.Module):
         x = F.relu(self.fc4_bn(self.fc4(x)))
         x = self.fc5(x)
 
-        print(x.shape)
-
         return x
 
     def save(self, PATH):
@@ -291,7 +289,6 @@ class vgg_pose(nn.Module):
         with torch.no_grad():
             x = self.features(x)
         x = self.net(x.detach()).squeeze()
-        print(x.shape)
         return x
 
 
