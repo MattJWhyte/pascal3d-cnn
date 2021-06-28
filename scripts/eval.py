@@ -38,7 +38,6 @@ def get_angle(y,target):
 def thirty_deg_accuracy(y, target):
     y = y.numpy()
     target = target.detach().numpy()
-    print(y.shape)
     y_norm = np.linalg.norm(y, axis=1)
     target_norm = np.linalg.norm(target, axis=1)
     norm = y_norm * target_norm.T
