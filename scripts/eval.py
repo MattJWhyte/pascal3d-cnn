@@ -1,7 +1,7 @@
 import os
 
 import numpy as np
-from scripts.dataset import PascalDataset
+from scripts.dataset import PascalDataset, RawPascalDataset
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -71,14 +71,14 @@ def evaluate_model(pth, net):
     return acc/ct, np.median(np.array(theta))
 
 
-def predict_model(pth, net, net_name):
+def predict_model(pth, net, net_name, size):
     # Load model
     nt = net()
     nt.load(pth)
     nt.eval()
     nt.to('cuda' if torch.cuda.is_available() else "cpu")
-    train_dset = PascalDataset()
-    test_dset = PascalDataset(train=False)
+    train_dset = RawPascalDataset(size)
+    test_dset = RawPascalDataset(size, train=False)
 
     train_pred_az = []
     train_target_az = []
@@ -103,9 +103,7 @@ def predict_model(pth, net, net_name):
 
     for i in range(len(train_dset)):
         y = nt(train_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
-        img_name = train_dset.data[i].replace("/", "-")
         target = train_dset[i][1].unsqueeze(0)
-        theta = get_angle(y, target)
         train_acc += thirty_deg_accuracy(y, target)
         y = y.numpy()
         target = target.numpy()
@@ -130,9 +128,7 @@ def predict_model(pth, net, net_name):
 
     for i in range(len(test_dset)):
         y = nt(test_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
-        img_name = test_dset.data[i].replace("/", "-")
         target = test_dset[i][1].unsqueeze(0)
-        theta = get_angle(y, target)
         test_acc += thirty_deg_accuracy(y, target)
         y = y.numpy()
         target = target.numpy()
