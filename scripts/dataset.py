@@ -6,6 +6,7 @@ import numpy as np
 import scripts.config as config
 import torch
 from torch.utils.data import DataLoader, Dataset
+import sys
 
 DATASET_TRAIN_DIR = "imagenet_128_128_stretched_train/"
 DATASET_VAL_DIR = "imagenet_128_128_stretched_val/"
@@ -65,6 +66,8 @@ class RawPascalDataset(Dataset):
         img = cv2.resize(img, self.size)
         print(img.shape)
         img = np.moveaxis(img, -1, 0)
+        cv2.imwrite("test.png", img)
+        sys.exit()
         print(img.shape)
         img = img / 255.0
         out = torch.from_numpy(img).float()
