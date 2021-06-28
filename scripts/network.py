@@ -294,6 +294,9 @@ class vgg_pose(nn.Module):
     def save(self, PATH):
         torch.save(self.state_dict(), PATH)
 
+    def load(self, PATH):
+        self.load_state_dict(torch.load(PATH))
+
 MODEL = {
     "net1": Net1,
     "net2": Net2,
