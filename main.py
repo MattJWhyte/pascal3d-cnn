@@ -135,9 +135,9 @@ height = int(sys.argv[3])
 train_set = RawPascalDataset((width,height))
 val_set = RawPascalDataset((width,height), train=False)
 
-train_dataloader = DataLoader(train_set, batch_size=128, shuffle=True)
-train_no_shuffle_dataloader = DataLoader(train_set, batch_size=128, shuffle=True)
-test_dataloader = DataLoader(val_set, batch_size=128)
+train_dataloader = DataLoader(train_set, batch_size=96, shuffle=True)
+train_no_shuffle_dataloader = DataLoader(train_set, batch_size=96, shuffle=True)
+test_dataloader = DataLoader(val_set, batch_size=96)
 
 model = MODEL[model_name]()
 model.to(device)
