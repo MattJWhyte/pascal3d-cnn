@@ -1,13 +1,8 @@
 import sys
 
-import torch
-import torch.nn as nn
 import matplotlib.pyplot as plt
 import numpy as np
 from torch.utils.data import Dataset, DataLoader
-import torch.nn.functional as F
-from torchvision import datasets
-from torchvision.transforms import ToTensor
 from scripts.network import *
 from scripts.dataset import PascalDataset, RawPascalDataset
 from scripts.eval import thirty_deg_accuracy, get_angle

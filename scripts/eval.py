@@ -1,7 +1,7 @@
 import os
 
 import numpy as np
-from scripts.dataset import PascalDataset
+from scripts.dataset import PascalDataset, RawPascalDataset
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -71,14 +71,14 @@ def evaluate_model(pth, net):
     return acc/ct, np.median(np.array(theta))
 
 
-def predict_model(pth, net, net_name):
+def predict_model(pth, net, net_name, size):
     # Load model
     nt = net()
     nt.load(pth)
     nt.eval()
     nt.to('cuda' if torch.cuda.is_available() else "cpu")
-    train_dset = PascalDataset()
-    test_dset = PascalDataset(train=False)
+    train_dset = RawPascalDataset(size)
+    test_dset = RawPascalDataset(size, train=False)
 
     train_pred_az = []
     train_target_az = []
