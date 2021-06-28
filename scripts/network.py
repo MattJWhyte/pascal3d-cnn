@@ -288,9 +288,11 @@ class vgg_pose(nn.Module):
         x = x / self.std
         with torch.no_grad():
             x = self.features(x)
-        x = self.net(x.detach()).squeeze()
+        x = self.net(x.detach()).squeeze() # Added squeeze for compatibility
         return x
 
+    def save(self, PATH):
+        torch.save(self.state_dict(), PATH)
 
 MODEL = {
     "net1": Net1,
