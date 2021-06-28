@@ -33,6 +33,7 @@ class PascalDataset(Dataset):
         img = np.moveaxis(img, -1, 0)
         img = img / 255.0
         out = torch.from_numpy(img).float()
+        print(out.shape)
         return out, torch.from_numpy(self.labels[idx]).float()
 
 
@@ -61,10 +62,13 @@ class RawPascalDataset(Dataset):
     def __getitem__(self, idx):
         cat,img_name = self.data[idx]
         img = cv2.imread("{}/Images/{}_imagenet/{}.JPEG".format(config.PASCAL_DIR, cat, img_name))
+        print(img.shape)
         img = cv2.resize(img, self.size)
         img = np.moveaxis(img, -1, 0)
+        print(img.shape)
         img = img / 255.0
         out = torch.from_numpy(img).float()
+        print(out.shape)
         return out, torch.from_numpy(self.labels[idx]).float()
 
 
