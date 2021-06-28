@@ -103,9 +103,7 @@ def predict_model(pth, net, net_name, size):
 
     for i in range(len(train_dset)):
         y = nt(train_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
-        img_name = train_dset.data[i].replace("/", "-")
         target = train_dset[i][1].unsqueeze(0)
-        theta = get_angle(y, target)
         train_acc += thirty_deg_accuracy(y, target)
         y = y.numpy()
         target = target.numpy()
@@ -130,9 +128,7 @@ def predict_model(pth, net, net_name, size):
 
     for i in range(len(test_dset)):
         y = nt(test_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
-        img_name = test_dset.data[i].replace("/", "-")
         target = test_dset[i][1].unsqueeze(0)
-        theta = get_angle(y, target)
         test_acc += thirty_deg_accuracy(y, target)
         y = y.numpy()
         target = target.numpy()
