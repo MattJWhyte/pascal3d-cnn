@@ -127,8 +127,8 @@ def test_loop(dataloader, model, loss_fn):
     test_acc_ls.append(correct/ct)
 
 
-train_set = RawPascalDataset((128,128))
-val_set = RawPascalDataset((128,128), train=False)
+train_set = RawPascalDataset((224,224))
+val_set = RawPascalDataset((224,224), train=False)
 
 train_dataloader = DataLoader(train_set, batch_size=128, shuffle=True)
 train_no_shuffle_dataloader = DataLoader(train_set, batch_size=128, shuffle=True)
