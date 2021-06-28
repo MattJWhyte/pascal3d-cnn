@@ -62,8 +62,8 @@ class RawPascalDataset(Dataset):
     def __getitem__(self, idx):
         cat,img_name = self.data[idx]
         img = cv2.imread("{}/Images/{}_imagenet/{}.JPEG".format(config.PASCAL_DIR, cat, img_name))
-        print(img.shape)
         img = cv2.resize(img, self.size)
+        print(img.shape)
         img = np.moveaxis(img, -1, 0)
         print(img.shape)
         img = img / 255.0
