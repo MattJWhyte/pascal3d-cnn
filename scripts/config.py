@@ -1,1 +1,1 @@
-PASCAL_DIR = "INSERT_DIR_HERE"
+PASCAL_DIR = "/home/matthew/pascal3d-analysis/PASCAL3D+_release1.1"
