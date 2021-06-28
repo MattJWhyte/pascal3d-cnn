@@ -52,7 +52,7 @@ class RawPascalDataset(Dataset):
                     az = ann["viewpoint"]["azimuth"]
                     el = ann["viewpoint"]["elevation"]
                     coords = as_cartesian([1, el, az])
-                    self.labels.append(coords)
+                    self.labels.append(np.array(coords))
                     self.data.append((cat, img_name))
 
     def __len__(self):
