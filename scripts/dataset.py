@@ -5,8 +5,10 @@ import scipy.io as sio
 import numpy as np
 import scripts.config as config
 import torch
+from torchvision import transforms
 from torch.utils.data import DataLoader, Dataset
 import sys
+from PIL import Image
 
 DATASET_TRAIN_DIR = "imagenet_128_128_stretched_train/"
 DATASET_VAL_DIR = "imagenet_128_128_stretched_val/"
@@ -62,17 +64,12 @@ class RawPascalDataset(Dataset):
 
     def __getitem__(self, idx):
         cat,img_name = self.data[idx]
-        img = cv2.imread("{}/Images/{}_imagenet/{}.JPEG".format(config.PASCAL_DIR, cat, img_name))
-        img = cv2.resize(img, self.size)
-        print(img.shape)
-        img = np.moveaxis(img, -1, 0)
-        cv2.imwrite("test.png", img)
-        sys.exit()
-        print(img.shape)
-        img = img / 255.0
-        out = torch.from_numpy(img).float()
-        print(out.shape)
-        return out, torch.from_numpy(self.labels[idx]).float()
+        img = Image.open("{}/Images/{}_imagenet/{}.JPEG".format(config.PASCAL_DIR, cat, img_name))
+        img = img.resize(self.size, Image.ANTIALIAS)
+        transform = transforms.Compose([
+            transforms.ToTensor()
+        ])
+        return transform(img), torch.from_numpy(self.labels[idx]).float()
 
 
 def as_cartesian(rthetaphi):
