@@ -17,6 +17,7 @@ def distance_elevation_azimuth(xyz):
     z = xyz[:,2]
     theta = np.abs(90-np.rad2deg(np.arccos(z / np.sqrt(x ** 2 + y ** 2 + z ** 2))))
     c = (z < 0).astype(int)
+    print(c)
     theta = theta - 2*c*theta
     #if z < 0:
     #    theta *= -1.0
