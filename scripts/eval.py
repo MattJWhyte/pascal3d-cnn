@@ -105,7 +105,7 @@ def predict_model(pth, net, net_name, size):
         y = nt(train_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
         target = train_dset[i][1].unsqueeze(0)
         print(y.shape)
-        print(y.target)
+        print(target.shape)
         train_acc += thirty_deg_accuracy(y, target)
         y = y.numpy()
         target = target.numpy()
