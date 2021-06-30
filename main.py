@@ -64,7 +64,9 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
-    plt.plot(bin_ct, [15.0*i*np.pi/180.0 for i in range(24)])
+    f = plt.figure()
+    ax = f.add_subplot(projection='polar')
+    ax.plot([15.0*i*np.pi/180.0 for i in range(24)], bin_ct)
     plt.savefig("train-dist.png")
     plt.close()
 
