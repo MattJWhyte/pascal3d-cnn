@@ -28,7 +28,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
     torch.autograd.set_grad_enabled(istrain)
     model = model.train() if istrain else model.eval()
 
-    bin_ct = [0.0 for _ in range(24)]
+    bin_ct = np.array([0.0 for _ in range(24)])
     bin_acc = [0.0 for _ in range(24)]
 
     for batch, (X, y) in enumerate(dataloader):
@@ -51,9 +51,9 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
         k = thirty_deg_accuracy_vector(pred, y)
 
         _,_,e = distance_elevation_azimuth(y.numpy())
-        print(e)
         e = (e % 15).astype(int)
-        print(e)
+
+        bin_ct += np.histogram(e, bins=[0.5] + [i+1.5 for i in range(24)])
 
         correct += np.count_nonzero(k)
 
