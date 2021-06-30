@@ -16,11 +16,15 @@ def distance_elevation_azimuth(xyz):
     y = xyz[:,1]
     z = xyz[:,2]
     theta = np.abs(90-np.rad2deg(np.arccos(z / np.sqrt(x ** 2 + y ** 2 + z ** 2))))
-    if z < 0:
-        theta *= -1.0
+    c = z < 0
+    theta = theta + 2*c*theta
+    #if z < 0:
+    #    theta *= -1.0
     phi = np.rad2deg(np.arctan2(y,x))
-    if phi < 0.0:
-        phi += 360.0
+    d = phi < 0
+    phi = phi + 360.0*d
+    #if phi < 0.0:
+    #    phi += 360.0
     return [np.sqrt(x**2+y**2+z**2), theta, phi]
 
 
