@@ -18,6 +18,7 @@ train_acc_ls = []
 test_loss_ls = []
 test_acc_ls = []
 
+
 def epoch(dataloader, model, loss_fn, optimizer=None):
     size = len(dataloader.dataset)
     correct = 0.0
@@ -50,12 +51,12 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
         y = y.detach().cpu()
         k = thirty_deg_accuracy_vector(pred, y)
 
-        _,_,e = distance_elevation_azimuth(y.numpy())
-        e = (e % 15).astype(int)
+        #_,_,e = distance_elevation_azimuth(y.numpy())
+        #e = (e % 15).astype(int)
 
-        print(np.max(e))
+        #print(np.max(e))
 
-        bin_ct += np.histogram(e, bins= np.array([0.5] + [i+1.5 for i in range(24)]))[0]
+        #bin_ct += np.histogram(e, bins= np.array([0.5] + [i+1.5 for i in range(24)]))[0]
 
         correct += np.count_nonzero(k)
 
@@ -104,7 +105,7 @@ name = type(model).__name__.lower()
 loss_fn = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters())
 
-epochs = 1000
+epochs = 50
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     epoch(train_dataloader, model, loss_fn, optimizer)
