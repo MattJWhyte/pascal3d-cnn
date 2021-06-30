@@ -28,6 +28,9 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
     torch.autograd.set_grad_enabled(istrain)
     model = model.train() if istrain else model.eval()
 
+    bin_ct = [0.0 for _ in range(24)]
+    bin_acc = [0.0 for _ in range(24)]
+
     for batch, (X, y) in enumerate(dataloader):
         ct += 1
         X, y = X.to(device), y.to(device)
@@ -46,6 +49,10 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
         pred = pred.detach().cpu()
         y = y.detach().cpu()
         k = thirty_deg_accuracy_vector(pred, y)
+
+        _,_,e = distance_elevation_azimuth(y.numpy())
+        e = (e % 15).astype(int)
+
         correct += np.count_nonzero(k)
 
         epoch_loss += loss.item()
