@@ -64,6 +64,10 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
+    plt.plot(bin_ct, [15.0*i*np.pi/180.0 for i in range(24)])
+    plt.savefig("train-dist.png")
+    plt.close()
+
     epoch_loss /= ct
     correct /= float(len(dataloader.dataset))
     if istrain:
