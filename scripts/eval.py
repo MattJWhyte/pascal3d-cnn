@@ -85,10 +85,16 @@ def predict_model(pth, net, net_name, size):
     train_pred_el = []
     train_target_el = []
 
+    train_bin_acc = [0.0 for _ in range(0,24)]
+    train_bin_ct = [0 for _ in range(0, 24)]
+
     test_pred_az = []
     test_target_az = []
     test_pred_el = []
     test_target_el = []
+
+    test_bin_acc = [0.0 for _ in range(0, 24)]
+    test_bin_ct = [0 for _ in range(0, 24)]
 
     test_acc = 0.0
     train_acc = 0.0
@@ -106,12 +112,15 @@ def predict_model(pth, net, net_name, size):
         target = train_dset[i][1].unsqueeze(0)
         print(y.shape)
         print(target.shape)
-        train_acc += thirty_deg_accuracy(y, target)
-        y = y.numpy()
-        target = target.numpy()
-
+        acc = thirty_deg_accuracy(y, target)
+        train_acc += acc
         _, pred_el, pred_az = distance_elevation_azimuth(y)
         _, target_el, target_az = distance_elevation_azimuth(target)
+        bin = target_az % 15.0
+        train_bin_acc[bin] += acc
+        train_bin_ct[bin] += 1
+        y = y.numpy()
+        target = target.numpy()
         train_pred_el.append(pred_el)
         train_target_el.append(target_el)
         train_pred_az.append(pred_az)
@@ -129,14 +138,17 @@ def predict_model(pth, net, net_name, size):
     print("TRAIN ACCURACY: {}".format(train_acc/len(train_dset)))
 
     for i in range(len(test_dset)):
-        y = nt(test_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
+        y = nt(test_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu().unsqueeze(0)
         target = test_dset[i][1].unsqueeze(0)
-        test_acc += thirty_deg_accuracy(y, target)
+        acc = thirty_deg_accuracy(y, target)
+        test_acc += acc
         y = y.numpy()
         target = target.numpy()
-
         _, pred_el, pred_az = distance_elevation_azimuth(y)
         _, target_el, target_az = distance_elevation_azimuth(target)
+        bin = target_az % 15.0
+        test_bin_acc[bin] += acc
+        test_bin_ct[bin] += 1
         test_pred_el.append(pred_el)
         test_target_el.append(target_el)
         test_pred_az.append(pred_az)
@@ -154,9 +166,19 @@ def predict_model(pth, net, net_name, size):
 
     print("TEST ACCURACY: {}".format(test_acc / len(test_dset)))
 
-    cmap = cm.get_cmap('hsv')
+    f = plt.figure()
+    ax = f.add_subplot(1, 1, 1, projection="polar")
+    train_bin_acc = [acc/ct for acc, ct in zip(train_bin_acc, train_bin_ct)]
+    ax.bar([np.deg2rad(15.0)*i for i in range(24)], train_bin_ct, cmap='coolwarm', c=train_bin_acc)
+    plt.savefig(pt + "train-accuracy-by-azimuth.png")
+    plt.close(f)
 
-    rgba = cmap(0.5)
+    f = plt.figure()
+    ax = f.add_subplot(1, 1, 1, projection="polar")
+    test_bin_acc = [acc / ct for acc, ct in zip(test_bin_acc, test_bin_ct)]
+    ax.bar([np.deg2rad(15.0) * i for i in range(24)], test_bin_ct, cmap='coolwarm', c=test_bin_acc)
+    plt.savefig(pt + "test-accuracy-by-azimuth.png")
+    plt.close(f)
 
     fig = plt.figure()
     ax2 = fig.add_subplot(1, 1, 1, projection="polar")
