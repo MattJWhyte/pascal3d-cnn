@@ -102,7 +102,7 @@ def predict_model(pth, net, net_name, size):
     pt = "results/" + net_name + "/"
 
     for i in range(len(train_dset)):
-        y = nt(train_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu()
+        y = nt(train_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu().unsqueeze(0)
         target = train_dset[i][1].unsqueeze(0)
         print(y.shape)
         print(target.shape)
