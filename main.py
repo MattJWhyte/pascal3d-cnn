@@ -49,6 +49,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
         pred = pred.detach().cpu()
         y = y.detach().cpu()
         k = thirty_deg_accuracy_vector(pred, y)
+        print(k)
 
         _,_,e = distance_elevation_azimuth(y.numpy())
         e = (e % 15).astype(int)
