@@ -8,7 +8,7 @@ import numpy as np
 from torch.utils.data import Dataset, DataLoader
 from scripts.network import *
 from scripts.dataset import PascalDataset, RawPascalDataset
-from scripts.eval import thirty_deg_accuracy, get_angle
+from scripts.eval import thirty_deg_accuracy_vector, distance_elevation_azimuth
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -45,8 +45,8 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
 
         pred = pred.detach().cpu()
         y = y.detach().cpu()
-        k = thirty_deg_accuracy(pred, y)
-        correct += k
+        k = thirty_deg_accuracy_vector(pred, y)
+        correct += np.count_nonzero(k)
 
         epoch_loss += loss.item()
 
@@ -56,7 +56,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
     epoch_loss /= ct
-    correct /= ct
+    correct /= float(len(dataloader.dataset))
     if istrain:
         print("Train loss: {}".format(epoch_loss))
         print("Train accuracy: {}".format(correct))
