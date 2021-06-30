@@ -53,7 +53,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
         _,_,e = distance_elevation_azimuth(y.numpy())
         e = (e % 15).astype(int)
 
-        bin_ct += np.histogram(e, bins=[0.5] + [i+1.5 for i in range(24)])
+        bin_ct += np.array(np.histogram(e, bins= np.array([0.5] + [i+1.5 for i in range(24)])))[0]
 
         correct += np.count_nonzero(k)
 
