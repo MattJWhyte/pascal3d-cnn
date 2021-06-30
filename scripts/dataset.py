@@ -66,7 +66,7 @@ class RawPascalDataset(Dataset):
         cat,img_name = self.data[idx]
         img = Image.open("{}/Images/{}_imagenet/{}.JPEG".format(config.PASCAL_DIR, cat, img_name))
         transform = transforms.Compose([
-            transforms.Resize(self.size),
+            transforms.Resize((3,self.size[0],self.size[1])),
             transforms.ToTensor()
         ])
         return transform(img), torch.from_numpy(self.labels[idx]).float()
