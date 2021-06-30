@@ -86,7 +86,7 @@ def predict_model(pth, net, net_name, size):
     train_target_el = []
 
     train_bin_acc = [0.0 for _ in range(0,24)]
-    train_bin_ct = [0 for _ in range(0, 24)]
+    train_bin_ct = [0.001 for _ in range(0, 24)]
 
     test_pred_az = []
     test_target_az = []
@@ -94,7 +94,7 @@ def predict_model(pth, net, net_name, size):
     test_target_el = []
 
     test_bin_acc = [0.0 for _ in range(0, 24)]
-    test_bin_ct = [0 for _ in range(0, 24)]
+    test_bin_ct = [0.001 for _ in range(0, 24)]
 
     test_acc = 0.0
     train_acc = 0.0
@@ -110,8 +110,6 @@ def predict_model(pth, net, net_name, size):
     for i in range(len(train_dset)):
         y = nt(train_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu().unsqueeze(0)
         target = train_dset[i][1].unsqueeze(0)
-        print(y.shape)
-        print(target.shape)
         acc = thirty_deg_accuracy(y, target)
         train_acc += acc
         _, pred_el, pred_az = distance_elevation_azimuth(y)
