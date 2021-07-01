@@ -175,17 +175,21 @@ def predict_model(pth, net, net_name, size):
 
     print("TEST ACCURACY: {}".format(test_acc / len(test_dset)))
 
+    cmap = cm.get_cmap("Reds")
+
     f = plt.figure()
     ax = f.add_subplot(1, 1, 1, projection="polar")
     train_bin_acc = [acc/ct for acc, ct in zip(train_bin_acc, train_bin_ct)]
-    ax.bar([np.deg2rad(15.0)*i for i in range(24)], train_bin_ct, cmap='coolwarm', c=train_bin_acc)
+    train_bin_color = [cmap(1.0-acc) for acc in train_bin_acc]
+    ax.bar([np.deg2rad(15.0)*i for i in range(24)], train_bin_ct, color=train_bin_color)
     plt.savefig(pt + "train-accuracy-by-azimuth.png")
     plt.close(f)
 
     f = plt.figure()
     ax = f.add_subplot(1, 1, 1, projection="polar")
     test_bin_acc = [acc / ct for acc, ct in zip(test_bin_acc, test_bin_ct)]
-    ax.bar([np.deg2rad(15.0) * i for i in range(24)], test_bin_ct, cmap='coolwarm', c=test_bin_acc)
+    test_bin_color = [cmap(1.0 - acc) for acc in test_bin_acc]
+    ax.bar([np.deg2rad(15.0) * i for i in range(24)], test_bin_ct, color=test_bin_color)
     plt.savefig(pt + "test-accuracy-by-azimuth.png")
     plt.close(f)
 
