@@ -121,7 +121,7 @@ def predict_model(pth, net, net_name, size):
     for i in range(len(train_dset)):
         y = nt(train_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu().unsqueeze(0)
         target = train_dset[i][1].unsqueeze(0)
-        acc = thirty_deg_accuracy(y, target)
+        acc = np.count_nonzero(thirty_deg_accuracy_vector(y, target))
         train_acc += acc
         _, pred_el, pred_az = distance_elevation_azimuth(y)
         _, target_el, target_az = distance_elevation_azimuth(target)
