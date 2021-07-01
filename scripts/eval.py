@@ -181,7 +181,7 @@ def predict_model(pth, net, net_name, size):
     ax = f.add_subplot(1, 1, 1, projection="polar")
     train_bin_acc = [acc/ct for acc, ct in zip(train_bin_acc, train_bin_ct)]
     train_bin_color = [cmap(1.0-acc) for acc in train_bin_acc]
-    ax.bar([np.deg2rad(15.0)*i for i in range(24)], train_bin_ct, color=train_bin_color)
+    ax.plot([np.deg2rad(15.0*(i + 0.5)) for i in range(24)], train_bin_acc, color=train_bin_color)
     plt.savefig(pt + "train-accuracy-by-azimuth.png")
     plt.close(f)
 
