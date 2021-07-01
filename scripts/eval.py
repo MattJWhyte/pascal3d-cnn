@@ -126,7 +126,8 @@ def predict_model(pth, net, net_name, size):
         _, pred_el, pred_az = distance_elevation_azimuth(y)
         _, target_el, target_az = distance_elevation_azimuth(target)
         bin = int(target_az // 15)
-        print(bin)
+        if bin == 24:
+            bin -= 1
         train_bin_acc[bin] += acc
         train_bin_ct[bin] += 1
         y = y.numpy()
@@ -159,7 +160,8 @@ def predict_model(pth, net, net_name, size):
         _, pred_el, pred_az = distance_elevation_azimuth(y)
         _, target_el, target_az = distance_elevation_azimuth(target)
         bin = int(target_az // 15)
-        print(bin)
+        if bin == 24:
+            bin -= 1
         test_bin_acc[bin] += acc
         test_bin_ct[bin] += 1
         test_pred_el.append(pred_el)
