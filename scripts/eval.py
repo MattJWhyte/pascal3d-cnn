@@ -145,7 +145,7 @@ def predict_model(pth, net, net_name, size):
     ax = f.add_subplot(1, 1, 1, projection="polar")
     train_bin_acc = [acc / ct for acc, ct in zip(train_bin_acc, train_bin_ct)]
     train_bin_color = [cmap(1.0 - acc) for acc in train_bin_acc]
-    ax.bar([np.deg2rad(15.0 * (i + 0.5)) for i in range(24)], train_bin_acc, color=train_bin_color,
+    ax.bar([np.deg2rad(15.0 * (i + 0.5)) for i in range(24)], train_bin_ct, color=train_bin_color,
            width=np.deg2rad(15.0), edgecolor='k')
     plt.savefig(pt + "train-accuracy-by-azimuth.png")
     plt.close(f)
@@ -175,7 +175,7 @@ def predict_model(pth, net, net_name, size):
     ax = f.add_subplot(1, 1, 1, projection="polar")
     test_bin_acc = [acc / ct for acc, ct in zip(test_bin_acc, test_bin_ct)]
     test_bin_color = [cmap(1.0 - acc) for acc in test_bin_acc]
-    ax.bar([np.deg2rad(15.0) * i for i in range(24)], test_bin_ct, color=test_bin_color, width=np.deg2rad(15.0), edgecolor='k')
+    ax.bar([np.deg2rad(15.0*(i+0.5)) for i in range(24)], test_bin_ct, color=test_bin_color, width=np.deg2rad(15.0), edgecolor='k')
     plt.savefig(pt + "test-accuracy-by-azimuth.png")
     plt.close(f)
 
