@@ -110,7 +110,7 @@ for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     epoch(train_dataloader, model, loss_fn, optimizer)
     epoch(test_dataloader, model, loss_fn)
-#    model.save("models/pascal3d-vp-cnn-"+name+".pth")
+    model.save("models/pascal3d-vp-cnn-"+name+".pth")
     plt.plot([i for i in range(1,t+2)], train_acc_ls, 'r-', label="Train acc.")
     plt.plot([i for i in range(1, t + 2)], train_loss_ls, 'r--', label="Train loss")
     plt.plot([i for i in range(1, t + 2)], test_acc_ls, 'b-', label="Test acc.")
