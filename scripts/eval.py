@@ -110,6 +110,12 @@ def predict_model(pth, net, net_name, size):
     test_acc = 0.0
     train_acc = 0.0
 
+    train_weighted_acc = 0.0
+    test_weighted_acc = 0.0
+
+    train_w = np.load(open("weight-train-2.0.npy", "rb"))
+    test_w = np.load(open("weight-val-2.0.npy", "rb"))
+
     if not os.path.exists("results"):
         os.mkdir("results")
 
@@ -123,6 +129,7 @@ def predict_model(pth, net, net_name, size):
         target = train_dset[i][1].unsqueeze(0)
         acc = np.count_nonzero(thirty_deg_accuracy_vector(y, target))
         train_acc += acc
+        train_weighted_acc += acc*train_w[i]
         _, pred_el, pred_az = distance_elevation_azimuth(y)
         _, target_el, target_az = distance_elevation_azimuth(target)
         bin = int(target_az // 15)
@@ -138,6 +145,7 @@ def predict_model(pth, net, net_name, size):
         train_target_az.append(target_az)
 
     print("TRAIN ACCURACY: {}".format(train_acc/len(train_dset)))
+    print("TRAIN WEIGHTED ACCURACY: {}".format(train_weighted_acc))
 
     cmap = cm.get_cmap("Reds")
 
@@ -155,6 +163,7 @@ def predict_model(pth, net, net_name, size):
         target = test_dset[i][1].unsqueeze(0)
         acc = thirty_deg_accuracy(y, target)
         test_acc += acc
+        test_weighted_acc += acc*test_w[i]
         y = y.numpy()
         target = target.numpy()
         _, pred_el, pred_az = distance_elevation_azimuth(y)
@@ -170,6 +179,7 @@ def predict_model(pth, net, net_name, size):
         test_target_az.append(target_az)
 
     print("TEST ACCURACY: {}".format(test_acc / len(test_dset)))
+    print("TEST WEIGHTED ACCURACY: {}".format(test_weighted_acc))
 
     f = plt.figure()
     ax = f.add_subplot(1, 1, 1, projection="polar")
