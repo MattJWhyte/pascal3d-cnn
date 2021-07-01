@@ -134,17 +134,19 @@ def predict_model(pth, net, net_name, size):
         train_target_el.append(target_el)
         train_pred_az.append(pred_az)
         train_target_az.append(target_az)
-        '''
-        plt.figure()
-        ax = plt.axes(projection='3d')
-        ax.plot([0,y[0,0]], [0,y[0,1]], [0,y[0,2]], "k-", label="Pred")
-        ax.plot([0, target[0,0]], [0, target[0,1]], [0, target[0,2]], "r-", label="Target")
-        plt.legend()
-        plt.title("Angle = {}".format(theta))
-        plt.savefig("results/predictions/"+img_name)
-        plt.close()'''
 
     print("TRAIN ACCURACY: {}".format(train_acc/len(train_dset)))
+
+    cmap = cm.get_cmap("Reds")
+
+    f = plt.figure()
+    ax = f.add_subplot(1, 1, 1, projection="polar")
+    train_bin_acc = [acc / ct for acc, ct in zip(train_bin_acc, train_bin_ct)]
+    train_bin_color = [cmap(1.0 - acc) for acc in train_bin_acc]
+    ax.bar([np.deg2rad(15.0 * (i + 0.5)) for i in range(24)], train_bin_acc, color=train_bin_color,
+           width=np.deg2rad(15.0), edgecolor='k')
+    plt.savefig(pt + "train-accuracy-by-azimuth.png")
+    plt.close(f)
 
     for i in range(len(test_dset)):
         y = nt(test_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu().unsqueeze(0)
@@ -163,27 +165,7 @@ def predict_model(pth, net, net_name, size):
         test_pred_az.append(pred_az)
         test_target_az.append(target_az)
 
-        '''
-        plt.figure()
-        ax = plt.axes(projection='3d')
-        ax.plot([0,y[0,0]], [0,y[0,1]], [0,y[0,2]], "k-", label="Pred")
-        ax.plot([0, target[0,0]], [0, target[0,1]], [0, target[0,2]], "r-", label="Target")
-        plt.legend()
-        plt.title("Angle = {}".format(theta))
-        plt.savefig("results/predictions/"+img_name)
-        plt.close()'''
-
     print("TEST ACCURACY: {}".format(test_acc / len(test_dset)))
-
-    cmap = cm.get_cmap("Reds")
-
-    f = plt.figure()
-    ax = f.add_subplot(1, 1, 1, projection="polar")
-    train_bin_acc = [acc/ct for acc, ct in zip(train_bin_acc, train_bin_ct)]
-    train_bin_color = [cmap(1.0-acc) for acc in train_bin_acc]
-    ax.bar([np.deg2rad(15.0*(i + 0.5)) for i in range(24)], train_bin_acc, color=train_bin_color, width=np.deg2rad(15.0), edgecolor='k')
-    plt.savefig(pt + "train-accuracy-by-azimuth.png")
-    plt.close(f)
 
     f = plt.figure()
     ax = f.add_subplot(1, 1, 1, projection="polar")
