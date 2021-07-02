@@ -114,7 +114,7 @@ def predict_model(pth, net, net_name, size):
     test_weighted_acc = 0.0
 
     train_w = np.load(open("weight-train-2.0.npy", "rb"))
-    test_w = np.load(open("rbf-weights-val.npy", "rb"))
+    test_w = np.load(open("rbf-weights-val.npy", "rb"), allow_pickle=True)
 
     if not os.path.exists("results"):
         os.mkdir("results")
