@@ -218,4 +218,28 @@ def predict_model(pth, net, net_name, size):
         plt.savefig(pt + t[i].lower().replace(" ", "_") + ".png")
 
 
+def get_model_thirty_deg_vector(pth, net, size):
+    # Load model
+    nt = net()
+    nt.load(pth)
+    nt.eval()
+    nt.to('cuda' if torch.cuda.is_available() else "cpu")
+    train_dset = RawPascalDataset(size)
+    test_dset = RawPascalDataset(size, train=False)
 
+    train_res_mat = np.zeros(len(train_dset))
+    test_res_mat = np.zeros(len(test_dset))
+
+    for i in range(len(train_dset)):
+        y = nt(train_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu().unsqueeze(0)
+        target = train_dset[i][1].unsqueeze(0)
+        acc = thirty_deg_accuracy(y, target)
+        train_res_mat[i] = acc
+
+    for i in range(len(test_dset)):
+        y = nt(test_dset[i][0].unsqueeze(0).to('cuda' if torch.cuda.is_available() else "cpu")).detach().cpu().unsqueeze(0)
+        target = test_dset[i][1].unsqueeze(0)
+        acc = thirty_deg_accuracy(y, target)
+        test_res_mat[i] = acc
+
+    return train_res_mat, test_res_mat
