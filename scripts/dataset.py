@@ -46,6 +46,7 @@ class RawPascalDataset(Dataset):
         self.data = []
         self.labels = []
         self.size = size
+        self.cat_idx = []
         tag = "train" if train else "val"
         out = ""
         for cat in CATEGORIES:
@@ -62,8 +63,8 @@ class RawPascalDataset(Dataset):
                     self.labels.append(np.array(coords))
                     self.data.append((cat, img_name))
                     out += img_name + "\n"
-        with open("test.txt", "w") as f:
-            f.write(out)
+            self.cat_idx.append(len(self.labels))
+        self.cat_idx = np.array(self.cat_idx)
 
     def __len__(self):
         return len(self.data)

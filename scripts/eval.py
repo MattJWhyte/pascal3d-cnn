@@ -242,4 +242,4 @@ def get_model_thirty_deg_vector(pth, net, size):
         acc = thirty_deg_accuracy(y, target)
         test_res_mat[i] = acc
 
-    return train_res_mat, test_res_mat
+    return train_res_mat, train_dset.cat_idx, test_res_mat, test_dset.cat_idx
