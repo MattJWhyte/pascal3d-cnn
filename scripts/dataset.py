@@ -47,17 +47,23 @@ class RawPascalDataset(Dataset):
         self.labels = []
         self.size = size
         tag = "train" if train else "val"
+        out = ""
         for cat in CATEGORIES:
             with open("{}/Image_sets/{}_imagenet_{}.txt".format(config.PASCAL_DIR, cat, tag), "r") as f:
                 for img_name in f.readlines():
                     img_name = img_name.replace("\n", "")
                     ann = get_image_annotations(
                         "{}/Annotations/{}_imagenet/{}.mat".format(config.PASCAL_DIR, cat, img_name), cat)[0]
+                    if ann["viewpoint"]["num_anchor"] == 0:
+                        continue
                     az = ann["viewpoint"]["azimuth"]
                     el = ann["viewpoint"]["elevation"]
                     coords = as_cartesian([1, el, az])
                     self.labels.append(np.array(coords))
                     self.data.append((cat, img_name))
+                    out += img_name + "\n"
+        with open("test.txt", "w") as f:
+            f.write(out)
 
     def __len__(self):
         return len(self.data)
