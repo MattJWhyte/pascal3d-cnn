@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from torch.utils.data import Dataset, DataLoader
 from scripts.network import *
-from scripts.dataset import PascalDataset, RawPascalDataset
+from scripts.dataset import RawPascalDataset
+from scripts.shapenet_dataset import ShapeNetDataset
 from scripts.eval import thirty_deg_accuracy_vector, distance_elevation_azimuth
 
 
@@ -92,8 +93,8 @@ model_name = sys.argv[1].lower()
 width = int(sys.argv[2])
 height = int(sys.argv[3])
 
-train_set = RawPascalDataset((width,height))
-val_set = RawPascalDataset((width,height), train=False)
+train_set = ShapeNetDataset((width,height), cat_ls=["aeroplane"])
+val_set = RawPascalDataset((width,height), train=False, cat_ls=["aeroplane"])
 
 train_dataloader = DataLoader(train_set, batch_size=96, shuffle=True)
 test_dataloader = DataLoader(val_set, batch_size=96)

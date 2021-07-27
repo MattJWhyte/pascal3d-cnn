@@ -1,7 +1,7 @@
 import os
 
 import numpy as np
-from scripts.dataset import PascalDataset, RawPascalDataset
+from scripts.dataset import RawPascalDataset
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -63,7 +63,7 @@ def evaluate_model(pth, net):
     nt.load(pth)
     nt.eval()
     nt.to('cuda' if torch.cuda.is_available() else "cpu")
-    dset = PascalDataset(train=False)
+    dset = RawPascalDataset((224,224), train=False)
     dataloader = DataLoader(dset, batch_size=48)
     n = len(dset)
     acc = 0.0

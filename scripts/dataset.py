@@ -15,41 +15,16 @@ DATASET_VAL_DIR = "imagenet_128_128_stretched_val/"
 CATEGORIES = ["aeroplane", "bicycle", "boat", "bottle", "bus", "car", "chair", "diningtable", "motorbike", "sofa", "train", "tvmonitor"]
 
 
-class PascalDataset(Dataset):
-
-    def __init__(self, train=True):
-        self.data = []
-        self.labels = []
-
-        dataset_dir = DATASET_TRAIN_DIR if train else DATASET_VAL_DIR
-        annotation_dict = json.load(open(dataset_dir+"annotation.json","r"))
-        for cat in CATEGORIES:
-            for img_name,ann in annotation_dict[cat].items():
-                self.data.append(dataset_dir + cat + "_imagenet/{}.png".format(img_name))
-                self.labels.append(np.array(ann))
-
-    def __len__(self):
-        return len(self.data)
-
-    def __getitem__(self, idx):
-        img = cv2.imread(self.data[idx])
-        img = np.moveaxis(img, -1, 0)
-        img = img / 255.0
-        out = torch.from_numpy(img).float()
-        print(out.shape)
-        return out, torch.from_numpy(self.labels[idx]).float()
-
-
 class RawPascalDataset(Dataset):
 
-    def __init__(self, size, train=True):
+    def __init__(self, size, train=True, cat_ls=None):
         self.data = []
         self.labels = []
         self.size = size
         self.cat_idx = []
         tag = "train" if train else "val"
         out = ""
-        for cat in CATEGORIES:
+        for cat in (CATEGORIES if cat_ls is None else cat_ls):
             with open("{}/Image_sets/{}_imagenet_{}.txt".format(config.PASCAL_DIR, cat, tag), "r") as f:
                 for img_name in f.readlines():
                     img_name = img_name.replace("\n", "")
