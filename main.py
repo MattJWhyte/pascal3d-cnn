@@ -96,7 +96,7 @@ comment = ""
 if len(sys.argv) > 4:
     comment = "-" + sys.argv[4]
 
-print("Saving model to 'models/pascal3d-vp-cnn-"+name+comment+".pth'")
+print("Saving model to 'models/pascal3d-vp-cnn-"+model_name+comment+".pth'")
 
 train_set = ShapeNetDataset((width,height), cat_ls=["aeroplane"])
 val_set = RawPascalDataset((width,height), train=False, cat_ls=["aeroplane"])
