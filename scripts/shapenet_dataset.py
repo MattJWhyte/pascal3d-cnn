@@ -6,6 +6,7 @@ import numpy as np
 import scripts.config as config
 import torch
 from torchvision import transforms
+from torchvision.utils import save_image
 from torch.utils.data import DataLoader, Dataset
 import os
 import sys
@@ -33,8 +34,11 @@ class ShapeNetDataset(Dataset):
             for i, ann_str in enumerate(f.readlines()):
                 self.data.append((cat, os.path.join(path, img, "render_{}.png".format(i))))
                 ann = [float(a) for a in ann_str.split(" ")]
-                ann[0] = 360+ann[0] if ann[0] < 0 else ann[0]
-                self.labels.append(np.array(as_cartesian([1, ann[1], ann[0]])))
+                el = ann[1]
+                az = 360+ann[0] if ann[0] < 0 else ann[0]
+                coords = np.array(as_cartesian([1, el, az]))
+                self.labels.append(coords)
+
 
 
     def __len__(self):
@@ -47,7 +51,24 @@ class ShapeNetDataset(Dataset):
             transforms.Resize(self.size),
             transforms.ToTensor()
         ])
-        return transform(img), torch.from_numpy(self.labels[idx]).float()
+        t_img = transform(img)
+        #rthetaphi = "_".join([str(s) for s in self.labels[idx].tolist()])
+        #save_image(t_img, "imgs/{}@{}.png".format(img_name.replace("/","_"),rthetaphi))
+        return t_img, torch.from_numpy(self.labels[idx]).float()
+
+
+def distance_elevation_azimuth(xyz):
+    x = xyz[0]
+    y = xyz[1]
+    z = xyz[2]
+    theta = np.abs(90-np.rad2deg(np.arccos(z / np.sqrt(x ** 2 + y ** 2 + z ** 2))))
+    if z < 0:
+        theta *= -1.0
+    phi = np.rad2deg(np.arctan2(y,x))
+    if phi < 0.0:
+        phi += 360.0
+    return [np.sqrt(x**2+y**2+z**2), theta, phi]
+
 
 
 def as_cartesian(rthetaphi):
@@ -57,5 +78,13 @@ def as_cartesian(rthetaphi):
     x = r * np.sin( theta ) * np.cos( phi )
     y = r * np.sin( theta ) * np.sin( phi )
     z = r * np.cos( theta )
+    rtp = distance_elevation_azimuth(np.array([x,y,z]))
+    if np.abs(rthetaphi[0]-rtp[0]) > 0.005:
+        print("BIG R PROBLEM")
+    if np.abs(rthetaphi[1] - rtp[1]) > 0.005:
+        print("BIG THETA PROBLEM")
+    if np.abs(rthetaphi[2] - rtp[2]) > 0.005:
+        print("BIG PHI PROBLEM")
+
     return [x,y,z]
 

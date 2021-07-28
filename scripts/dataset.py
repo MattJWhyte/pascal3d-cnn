@@ -6,6 +6,7 @@ import numpy as np
 import scripts.config as config
 import torch
 from torchvision import transforms
+from torchvision.utils import save_image
 from torch.utils.data import DataLoader, Dataset
 import sys
 from PIL import Image
@@ -51,7 +52,23 @@ class RawPascalDataset(Dataset):
             transforms.Resize(self.size),
             transforms.ToTensor()
         ])
-        return transform(img), torch.from_numpy(self.labels[idx]).float()
+        t_img = transform(img)
+        #rthetaphi = "_".join([str(s) for s in self.labels[idx].tolist()])
+        #save_image(t_img, "pascal_imgs/{}@{}.png".format(img_name.replace("/", "_"), rthetaphi))
+        return t_img, torch.from_numpy(self.labels[idx]).float()
+
+
+def distance_elevation_azimuth(xyz):
+    x = xyz[0]
+    y = xyz[1]
+    z = xyz[2]
+    theta = np.abs(90-np.rad2deg(np.arccos(z / np.sqrt(x ** 2 + y ** 2 + z ** 2))))
+    if z < 0:
+        theta *= -1.0
+    phi = np.rad2deg(np.arctan2(y,x))
+    if phi < 0.0:
+        phi += 360.0
+    return [np.sqrt(x**2+y**2+z**2), theta, phi]
 
 
 def as_cartesian(rthetaphi):
