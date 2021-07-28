@@ -10,13 +10,12 @@ class Net1(nn.Module):
     def __init__(self):
         super(Net1, self).__init__()
         # Input 128 x 128
-        self.conv1 = nn.Conv2d(3, 32, 5, stride=(2,2))
-        self.conv2 = nn.Conv2d(32, 64, 5)
-        self.conv3 = nn.Conv2d(64, 64, 3, stride=(2,2))
-        self.conv4 = nn.Conv2d(64, 128, 3)
-        self.conv5 = nn.Conv2d(128, 256, 3, stride=(2,2))
-        self.conv6 = nn.Conv2d(256, 256, 3)
-        self.conv7 = nn.Conv2d(256, 256, 3, stride=(2,2))
+        self.conv1 = nn.Conv2d(3, 32, 3, stride=(2,2), padding=1)
+        self.conv2 = nn.Conv2d(32, 64, 3, stride=(2,2), padding=1)
+        self.conv3 = nn.Conv2d(64, 64, 3, stride=(2,2), padding=1)
+        self.conv4 = nn.Conv2d(64, 128, 3, stride=(2,2), padding=1)
+        self.conv5 = nn.Conv2d(128, 256, 3, stride=(2,2), padding=1)
+        self.conv6 = nn.Conv2d(256, 256, 3, stride=(2,2))
 
         self.bn1 = nn.BatchNorm2d(32)
         self.bn2 = nn.BatchNorm2d(64)
@@ -24,7 +23,6 @@ class Net1(nn.Module):
         self.bn4 = nn.BatchNorm2d(128)
         self.bn5 = nn.BatchNorm2d(256)
         self.bn6 = nn.BatchNorm2d(256)
-        self.bn7 = nn.BatchNorm2d(256)
 
         # More channels , smaller convolutions
         # Use stride for convolutions instead of max pool
@@ -56,8 +54,6 @@ class Net1(nn.Module):
         x = F.relu(self.bn5(self.conv5(x)))
         # C6
         x = F.relu(self.bn6(self.conv6(x)))
-        # C7
-        x = F.relu(self.bn7(self.conv7(x)))
 
         # Try get it to column vec
 
