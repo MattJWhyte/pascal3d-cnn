@@ -70,9 +70,9 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
         if not istrain and batch % 20 == 0:
             torchvision.utils.save_image(X[0], 'sample.png')
             print("Predicted")
-            print(pred.numpy())
+            print(pred[0].numpy())
             print("Target")
-            print(y.numpy())
+            print(y[0].numpy())
 
 
     f = plt.figure()
