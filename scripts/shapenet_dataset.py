@@ -3,6 +3,7 @@ import json
 import cv2
 import scipy.io as sio
 import numpy as np
+import matplotlib.pyplot as plt
 import scripts.config as config
 import torch
 from torchvision import transforms
@@ -11,7 +12,7 @@ from torch.utils.data import DataLoader, Dataset
 import os
 import sys
 from PIL import Image
-from torchvision.datasets import LSUN
+from torchvision.transforms import RandomResizedCrop
 import numpy.random as rand
 from scipy.stats import vonmises
 
@@ -34,6 +35,7 @@ class ShapeNetDataset(Dataset):
         for cat in (CATEGORY_CODES if cat_ls is None else [CATEGORY_CODES[CATEGORIES.index(name)] for name in cat_ls]):
             self.append_samples(cat)
         self.sun = []
+        '''
         with open(os.path.join(SUN_DIR,"ClassName.txt"), "r") as f:
             groups = f.readlines()
             for g in groups:
@@ -41,7 +43,7 @@ class ShapeNetDataset(Dataset):
                 img_list = [os.path.join(SUN_DIR,g,img_name) for img_name in os.listdir(os.path.join(SUN_DIR,g))]
                 self.sun += img_list
         if not os.path.exists(os.path.join(SUN_DIR,"temp")):
-            os.mkdir(os.path.join(SUN_DIR,"temp"))
+            os.mkdir(os.path.join(SUN_DIR,"temp"))'''
 
     def append_samples(self, cat):
         path = os.path.join(DATASET_DIR, cat)
@@ -67,7 +69,8 @@ class ShapeNetDataset(Dataset):
             img = Image.open(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))).convert('RGB')
             transform = transforms.Compose([
                 transforms.Resize(self.size),
-                transforms.ToTensor()
+                transforms.ToTensor(),
+                RandomResizedCrop(self.size, scale=(0.5, 1.0), ratio=(0.75, 1.333))
             ])
             t_img = transform(img)
             save_image(t_img, "test.png")
@@ -88,6 +91,7 @@ class ShapeNetDataset(Dataset):
             t_back_img.save(os.path.join(SUN_DIR,"temp",img_name.replace("/","-")))
             transform = transforms.Compose([
                 transforms.ToTensor(),
+                RandomResizedCrop(self.size, scale=(0.5, 1.0), ratio=(0.75, 1.333))
             ])
             t_img = transform(t_back_img)
         return t_img, torch.from_numpy(self.labels[idx]).float()
@@ -95,23 +99,29 @@ class ShapeNetDataset(Dataset):
 
 class VMBiasedShapeNetDataset(ShapeNetDataset):
 
-    def __init__(self, size, kappa, cat_ls=None):
-        super().__init__(self, size, cat_ls)
+    def __init__(self, size, kappa, loc, cat_ls=None):
+        super().__init__(size, cat_ls)
         self.sort_idx = np.argsort(np.array(self.azimuths))
         sorted_az = [self.azimuths[i] for i in self.sort_idx]
-        sample_ls = vonmises(kappa, size=len(self))
+        sample_ls = vonmises.rvs(kappa, loc=loc, size=len(self))
         sample_ls = sample_ls*180.0/np.pi
-        sample_ls = (sample_ls + 180) % 180
+        sample_ls = (sample_ls + 360) % 360
         self.sample_idx = []
         for s in sample_ls:
             idx = binary_search(sorted_az, s)
             self.sample_idx.append(self.sort_idx[idx])
+        a = [np.deg2rad(self.azimuths[idx]) for idx in self.sample_idx]
+        f = plt.figure()
+        ax = f.add_subplot(projection="polar")
+        ax.hist(a)
+        plt.savefig("dist.png")
+
 
     def __len__(self):
         return len(self.data)
 
     def __getitem__(self, idx):
-        return super().__getitem__(self, self.sample_idx[idx])
+        return super().__getitem__(self.sample_idx[idx])
 
 
 def distance_elevation_azimuth(xyz):
@@ -170,3 +180,7 @@ def binary_search(ls, x):
     if d_a < d_b:
         return a
     return b
+
+
+a = VMBiasedShapeNetDataset((224,224), 1.0, np.pi)
+
