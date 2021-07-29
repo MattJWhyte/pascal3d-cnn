@@ -11,11 +11,15 @@ from torch.utils.data import DataLoader, Dataset
 import os
 import sys
 from PIL import Image
+from torchvision.datasets import LSUN
+import numpy.random as rand
 
 DATASET_DIR = "/home/matthew/datasets/ShapeNet256/blenderRenderPreprocess"
+SUN_DIR = "/home/matthew/datasets/SUN397"
 CATEGORIES = ["aeroplane", "bicycle", "boat", "bottle", "bus", "car", "chair", "diningtable", "motorbike", "sofa", "train", "tvmonitor"]
 CATEGORY_CODES = ["02691156", "02834778", "04530566", "02876657", "02924116", "02958343", "03001627", "04379243", "03790512", "04256520", "04468005", "03211117"]
 
+LSUN_DATASET = None
 
 class ShapeNetDataset(Dataset):
 
@@ -25,6 +29,13 @@ class ShapeNetDataset(Dataset):
         self.labels = []
         for cat in (CATEGORY_CODES if cat_ls is None else [CATEGORY_CODES[CATEGORIES.index(name)] for name in cat_ls]):
             self.append_samples(cat)
+        self.sun = []
+        with open(os.path.join(SUN_DIR,"ClassName.txt"), "r") as f:
+            groups = f.readlines()
+            for g in groups:
+                img_list = [os.path.join(SUN_DIR,g,img_name) for img_name in os.listdir(os.path.join(SUN_DIR,g))]
+                self.sun += img_list
+
 
     def append_samples(self, cat):
         path = os.path.join(DATASET_DIR, cat)
@@ -40,20 +51,32 @@ class ShapeNetDataset(Dataset):
                 self.labels.append(coords)
 
 
-
     def __len__(self):
         return len(self.data)
 
     def __getitem__(self, idx):
         cat, img_name = self.data[idx]
-        img = Image.open(img_name).convert('RGB')
+        obj_img = Image.open(img_name).convert('RGBA')
         transform = transforms.Compose([
             transforms.Resize(self.size),
-            transforms.ToTensor()
         ])
-        t_img = transform(img)
-        #rthetaphi = "_".join([str(s) for s in self.labels[idx].tolist()])
-        #save_image(t_img, "imgs/{}@{}.png".format(img_name.replace("/","_"),rthetaphi))
+        t_obj_img = transform(obj_img)
+
+        idx = int(rand.uniform()*len(self.sun))
+        img_path = self.sun[idx]
+        print(img_path)
+        back_img = Image.open(img_path).convert('RGB')
+        t_back_img = transform(back_img)
+
+        for i in range(self.size[0]):
+            for j in range(self.size[1]):
+                alpha = t_back_img[i,j][3]
+                t_obj_img[i,j] = alpha*np.array(t_obj_img[i,j][:3]) + (1-alpha)*t_back_img[i,j]
+
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+        ])
+        t_img = transform(t_back_img)
         return t_img, torch.from_numpy(self.labels[idx]).float()
 
 
