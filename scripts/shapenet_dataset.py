@@ -59,7 +59,7 @@ class ShapeNetDataset(Dataset):
 
     def __getitem__(self, idx):
         cat, img_name = self.data[idx]
-        if os.path.exists(os.path.join(img_name.replace("/","-"))):
+        if os.path.exists(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))):
             img = Image.open(img_name).convert('RGB')
             transform = transforms.Compose([
                 transforms.Resize(self.size),
@@ -80,7 +80,7 @@ class ShapeNetDataset(Dataset):
             t_back_img.paste(t_obj_img, (0, 0), t_obj_img)
             t_back_img = t_back_img.convert("RGB")
 
-            t_back_img.save(os.path.join(img_name.replace("/","-")))
+            t_back_img.save(os.path.join(SUN_DIR,"temp",img_name.replace("/","-")))
             transform = transforms.Compose([
                 transforms.ToTensor(),
             ])
