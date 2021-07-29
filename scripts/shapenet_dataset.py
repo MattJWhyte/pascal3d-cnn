@@ -71,7 +71,7 @@ class ShapeNetDataset(Dataset):
 
         for i in range(self.size[0]):
             for j in range(self.size[1]):
-                alpha = t_back_img.getpixel((i,j))[3]
+                alpha = t_obj_img.getpixel((i,j))[3]
                 t_obj_img[i,j] = alpha*np.array(t_obj_img.getpixel((i,j))[:3]) + (1-alpha)*t_back_img.getpixel((i,j))
 
         transform = transforms.Compose([
