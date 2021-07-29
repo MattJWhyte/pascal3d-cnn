@@ -98,14 +98,14 @@ if len(sys.argv) > 4:
 
 print("Saving model to 'models/pascal3d-vp-cnn-"+model_name+comment+".pth'")
 
-#
-#train_set = ShapeNetDataset((width,height), cat_ls=["aeroplane"])
-#val_set = RawPascalDataset((width,height), train=False, cat_ls=["aeroplane"])
+train_set = ShapeNetDataset((width,height), cat_ls=["aeroplane"])
+val_set = RawPascalDataset((width,height), train=False, cat_ls=["aeroplane"])
 
+'''
 st = ShapeNetDataset((width,height), cat_ls=["aeroplane"])
 train_len = int(len(st)*0.7)
 test_len = len(st)-train_len
-train_set, val_set = torch.utils.data.random_split(st, [train_len, test_len])
+train_set, val_set = torch.utils.data.random_split(st, [train_len, test_len])'''
 
 train_dataloader = DataLoader(train_set, batch_size=96, shuffle=True)
 test_dataloader = DataLoader(val_set, batch_size=96)
