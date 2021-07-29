@@ -34,7 +34,8 @@ class ShapeNetDataset(Dataset):
             groups = f.readlines()
             for g in groups:
                 g = g.replace("\n", "")
-                print(os.path.join(SUN_DIR,g))
+                print(SUN_DIR)
+                print(os.path.join(SUN_DIR, g))
                 img_list = [os.path.join(SUN_DIR,g,img_name) for img_name in os.listdir(os.path.join(SUN_DIR,g))]
                 self.sun += img_list
 
