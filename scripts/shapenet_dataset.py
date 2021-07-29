@@ -63,8 +63,8 @@ class ShapeNetDataset(Dataset):
         ])
         t_obj_img = transform(obj_img)
 
-        idx = int(rand.uniform()*len(self.sun))
-        img_path = self.sun[idx]
+        r_idx = int(rand.uniform()*len(self.sun))
+        img_path = self.sun[r_idx]
         print(img_path)
         back_img = Image.open(img_path).convert('RGB')
         t_back_img = transform(back_img)
