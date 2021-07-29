@@ -36,6 +36,8 @@ class ShapeNetDataset(Dataset):
                 g = g.replace("\n", "")[1:] # Remove leading forward slash to prevent it being treated as absolute path
                 img_list = [os.path.join(SUN_DIR,g,img_name) for img_name in os.listdir(os.path.join(SUN_DIR,g))]
                 self.sun += img_list
+        if not os.path.exists(os.path.join(SUN_DIR,"temp")):
+            os.mkdir(os.path.join(SUN_DIR,"temp"))
 
 
     def append_samples(self, cat):
@@ -57,48 +59,32 @@ class ShapeNetDataset(Dataset):
 
     def __getitem__(self, idx):
         cat, img_name = self.data[idx]
-        obj_img = Image.open(img_name).convert('RGBA')
-        r_idx = int(rand.uniform() * len(self.sun))
-        img_path = self.sun[r_idx]
-        back_img = Image.open(img_path).convert('RGBA')
-        transform = transforms.Compose([
-            transforms.Resize(self.size),
-        ])
-        t_obj_img = transform(obj_img)
-        t_back_img = transform(back_img)
+        if os.path.exists(os.path.join(img_name.replace("/","-"))):
+            img = Image.open(img_name).convert('RGB')
+            transform = transforms.Compose([
+                transforms.Resize(self.size),
+                transforms.ToTensor()
+            ])
+            t_img = transform(img)
+        else:
+            obj_img = Image.open(img_name).convert('RGBA')
+            r_idx = int(rand.uniform() * len(self.sun))
+            img_path = self.sun[r_idx]
+            back_img = Image.open(img_path).convert('RGBA')
+            transform = transforms.Compose([
+                transforms.Resize(self.size),
+            ])
+            t_obj_img = transform(obj_img)
+            t_back_img = transform(back_img)
 
-        t_back_img.paste(t_obj_img, (0,0), t_obj_img)
-        t_back_img = t_back_img.convert("RGB")
+            t_back_img.paste(t_obj_img, (0, 0), t_obj_img)
+            t_back_img = t_back_img.convert("RGB")
 
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-        ])
-        t_img = transform(t_back_img)
-        #save_image(t_img, "imgs/{}.png".format(img_name.replace("/", "_")))
-        ''''
-        obj_img = Image.open(img_name).convert('RGBA')
-        transform = transforms.Compose([
-            transforms.Resize(self.size),
-        ])
-        t_obj_img = transform(obj_img)
-
-        r_idx = int(rand.uniform()*len(self.sun))
-        img_path = self.sun[r_idx]
-        print(img_path)
-        back_img = Image.open(img_path).convert('RGBA')
-        t_back_img = transform(back_img)
-
-        for i in range(self.size[0]):
-            for j in range(self.size[1]):
-                alpha = t_obj_img.getpixel((i,j))[3]
-                a = np.array(t_obj_img.getpixel((i,j))[:3])
-                t_obj_img.putpixel((i,j),tuple([int(np.round(x)) for x in (alpha*np.array(t_obj_img.getpixel((i,j))[:3]) + (1-alpha)*np.array(t_back_img.getpixel((i,j)))).tolist()]))
-
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-        ])
-        t_img = transform(t_back_img)
-        '''
+            t_back_img.save(os.path.join(img_name.replace("/","-")))
+            transform = transforms.Compose([
+                transforms.ToTensor(),
+            ])
+            t_img = transform(t_back_img)
         return t_img, torch.from_numpy(self.labels[idx]).float()
 
 
