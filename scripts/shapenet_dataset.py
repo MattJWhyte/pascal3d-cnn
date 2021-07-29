@@ -15,7 +15,7 @@ from torchvision.datasets import LSUN
 import numpy.random as rand
 
 DATASET_DIR = "/home/matthew/datasets/ShapeNet256/blenderRenderPreprocess"
-SUN_DIR = "/home/matthew/datasets/SUN397"
+SUN_DIR = "/home/matthew/datasets/SUN397/"
 CATEGORIES = ["aeroplane", "bicycle", "boat", "bottle", "bus", "car", "chair", "diningtable", "motorbike", "sofa", "train", "tvmonitor"]
 CATEGORY_CODES = ["02691156", "02834778", "04530566", "02876657", "02924116", "02958343", "03001627", "04379243", "03790512", "04256520", "04468005", "03211117"]
 
@@ -34,6 +34,7 @@ class ShapeNetDataset(Dataset):
             groups = f.readlines()
             for g in groups:
                 g = g.replace("\n", "")
+                print(os.path.join(SUN_DIR,g))
                 img_list = [os.path.join(SUN_DIR,g,img_name) for img_name in os.listdir(os.path.join(SUN_DIR,g))]
                 self.sun += img_list
 
