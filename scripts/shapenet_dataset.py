@@ -70,6 +70,7 @@ class ShapeNetDataset(Dataset):
                 transforms.ToTensor()
             ])
             t_img = transform(img)
+            save_image(t_img, "test.png")
         else:
             obj_img = Image.open(img_name).convert('RGBA')
             r_idx = int(rand.uniform() * len(self.sun))
