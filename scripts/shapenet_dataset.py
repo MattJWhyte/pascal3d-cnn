@@ -69,12 +69,12 @@ class ShapeNetDataset(Dataset):
         t_back_img = transform(back_img)
 
         t_back_img.paste(t_obj_img, (0,0), t_obj_img)
+        t_back_img.convert("RGB")
 
         transform = transforms.Compose([
             transforms.ToTensor(),
         ])
         t_img = transform(t_back_img)
-        t_img.convert("RGB")
         ''''
         obj_img = Image.open(img_name).convert('RGBA')
         transform = transforms.Compose([
