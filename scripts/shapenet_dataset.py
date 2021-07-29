@@ -58,6 +58,23 @@ class ShapeNetDataset(Dataset):
     def __getitem__(self, idx):
         cat, img_name = self.data[idx]
         obj_img = Image.open(img_name).convert('RGBA')
+        r_idx = int(rand.uniform() * len(self.sun))
+        img_path = self.sun[r_idx]
+        back_img = Image.open(img_path).convert('RGBA')
+        transform = transforms.Compose([
+            transforms.Resize(self.size),
+        ])
+        t_obj_img = transform(obj_img)
+        t_back_img = transform(back_img)
+        
+        t_back_img.paste(t_obj_img, (0,0), t_obj_img)
+
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+        ])
+        t_img = transform(t_back_img)
+        ''''
+        obj_img = Image.open(img_name).convert('RGBA')
         transform = transforms.Compose([
             transforms.Resize(self.size),
         ])
@@ -66,7 +83,7 @@ class ShapeNetDataset(Dataset):
         r_idx = int(rand.uniform()*len(self.sun))
         img_path = self.sun[r_idx]
         print(img_path)
-        back_img = Image.open(img_path).convert('RGB')
+        back_img = Image.open(img_path).convert('RGBA')
         t_back_img = transform(back_img)
 
         for i in range(self.size[0]):
@@ -79,6 +96,7 @@ class ShapeNetDataset(Dataset):
             transforms.ToTensor(),
         ])
         t_img = transform(t_back_img)
+        '''
         return t_img, torch.from_numpy(self.labels[idx]).float()
 
 
