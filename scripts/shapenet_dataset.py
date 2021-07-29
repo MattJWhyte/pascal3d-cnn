@@ -60,7 +60,6 @@ class ShapeNetDataset(Dataset):
         obj_img = Image.open(img_name).convert('RGBA')
         r_idx = int(rand.uniform() * len(self.sun))
         img_path = self.sun[r_idx]
-        print(img_path)
         back_img = Image.open(img_path).convert('RGBA')
         transform = transforms.Compose([
             transforms.Resize(self.size),
@@ -75,6 +74,7 @@ class ShapeNetDataset(Dataset):
             transforms.ToTensor(),
         ])
         t_img = transform(t_back_img)
+        save_image(t_img, "imgs/{}.png".format(img_name.replace("/", "_")))
         ''''
         obj_img = Image.open(img_name).convert('RGBA')
         transform = transforms.Compose([
