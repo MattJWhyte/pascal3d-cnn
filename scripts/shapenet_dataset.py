@@ -13,6 +13,7 @@ import sys
 from PIL import Image
 from torchvision.datasets import LSUN
 import numpy.random as rand
+from scipy.stats import vonmises
 
 DATASET_DIR = "/home/matthew/datasets/ShapeNet256/blenderRenderPreprocess"
 SUN_DIR = "/home/matthew/datasets/SUN397/"
@@ -21,12 +22,15 @@ CATEGORY_CODES = ["02691156", "02834778", "04530566", "02876657", "02924116", "0
 
 LSUN_DATASET = None
 
+
 class ShapeNetDataset(Dataset):
 
     def __init__(self, size, cat_ls=None):
         self.size = size
         self.data = []
         self.labels = []
+        self.elevations = []
+        self.azimuths = []
         for cat in (CATEGORY_CODES if cat_ls is None else [CATEGORY_CODES[CATEGORIES.index(name)] for name in cat_ls]):
             self.append_samples(cat)
         self.sun = []
@@ -39,7 +43,6 @@ class ShapeNetDataset(Dataset):
         if not os.path.exists(os.path.join(SUN_DIR,"temp")):
             os.mkdir(os.path.join(SUN_DIR,"temp"))
 
-
     def append_samples(self, cat):
         path = os.path.join(DATASET_DIR, cat)
         img_list = os.listdir(path)
@@ -51,8 +54,9 @@ class ShapeNetDataset(Dataset):
                 el = ann[1]
                 az = 360+ann[0] if ann[0] < 0 else ann[0]
                 coords = np.array(as_cartesian([1, el, az]))
+                self.elevations.append(el)
+                self.azimuths.append(az)
                 self.labels.append(coords)
-
 
     def __len__(self):
         return len(self.data)
@@ -60,7 +64,7 @@ class ShapeNetDataset(Dataset):
     def __getitem__(self, idx):
         cat, img_name = self.data[idx]
         if os.path.exists(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))):
-            img = Image.open(img_name).convert('RGB')
+            img = Image.open(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))).convert('RGB')
             transform = transforms.Compose([
                 transforms.Resize(self.size),
                 transforms.ToTensor()
@@ -88,6 +92,27 @@ class ShapeNetDataset(Dataset):
         return t_img, torch.from_numpy(self.labels[idx]).float()
 
 
+class VMBiasedShapeNetDataset(ShapeNetDataset):
+
+    def __init__(self, size, kappa, cat_ls=None):
+        super().__init__(self, size, cat_ls)
+        self.sort_idx = np.argsort(np.array(self.azimuths))
+        sorted_az = [self.azimuths[i] for i in self.sort_idx]
+        sample_ls = vonmises(kappa, size=len(self))
+        sample_ls = sample_ls*180.0/np.pi
+        sample_ls = (sample_ls + 180) % 180
+        self.sample_idx = []
+        for s in sample_ls:
+            idx = binary_search(sorted_az, s)
+            self.sample_idx.append(self.sort_idx[idx])
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        return super().__getitem__(self, self.sample_idx[idx])
+
+
 def distance_elevation_azimuth(xyz):
     x = xyz[0]
     y = xyz[1]
@@ -100,6 +125,11 @@ def distance_elevation_azimuth(xyz):
         phi += 360.0
     return [np.sqrt(x**2+y**2+z**2), theta, phi]
 
+
+def angle_dist(a, b):
+    clockwise_angle = np.abs(b-a)
+    anticlockwise_angle = np.abs( min(a,b) + (360.0 - max(a,b)) )
+    return min(clockwise_angle,anticlockwise_angle)
 
 
 def as_cartesian(rthetaphi):
@@ -119,3 +149,23 @@ def as_cartesian(rthetaphi):
 
     return [x,y,z]
 
+
+
+def binary_search(ls, x):
+    a = 0
+    b = len(ls)
+    while b-a > 1:
+        i = (a+b)//2
+        if ls[i] < x:
+            a = i
+        elif ls[i] > x:
+            b = i
+        else:
+            return i
+    if b == len(ls):
+        b = 0
+    d_a = angle_dist(ls[a],x)
+    d_b = angle_dist(ls[b],x)
+    if d_a < d_b:
+        return a
+    return b
