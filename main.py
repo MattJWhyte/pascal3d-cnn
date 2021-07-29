@@ -67,6 +67,13 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
             torchvision.utils.save_image(X[0], 'sample.png')
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
+        if not istrain and batch % 20 == 0:
+            torchvision.utils.save_image(X[0], 'sample.png')
+            print("Predicted")
+            print(pred.numpy())
+            print("Target")
+            print(y.numpy())
+
 
     f = plt.figure()
     ax = f.add_subplot(projection='polar')
@@ -98,8 +105,8 @@ if len(sys.argv) > 4:
 
 print("Saving model to 'models/pascal3d-vp-cnn-"+model_name+comment+".pth'")
 
-train_set = ShapeNetDataset((width,height), cat_ls=["chair"])
-val_set = RawPascalDataset((width,height), train=False, cat_ls=["chair"])
+train_set = ShapeNetDataset((width,height), cat_ls=["aeroplane"])
+val_set = RawPascalDataset((width,height), train=False, cat_ls=["aeroplane"])
 
 '''
 st = ShapeNetDataset((width,height), cat_ls=["aeroplane"])
