@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader, Dataset
 import os
 import sys
 from PIL import Image
-from torchvision.transforms import RandomResizedCrop
+from torchvision.transforms import RandomResizedCrop, ColorJitter
 import numpy.random as rand
 from scipy.stats import vonmises
 
@@ -70,7 +70,8 @@ class ShapeNetDataset(Dataset):
             transform = transforms.Compose([
                 transforms.Resize(self.size),
                 transforms.ToTensor(),
-                RandomResizedCrop(self.size, scale=(0.5, 1.0), ratio=(0.75, 1.333))
+                RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.66, 1.5)),
+                ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.3)
             ])
             t_img = transform(img)
             save_image(t_img, "test.png")
@@ -91,7 +92,8 @@ class ShapeNetDataset(Dataset):
             t_back_img.save(os.path.join(SUN_DIR,"temp",img_name.replace("/","-")))
             transform = transforms.Compose([
                 transforms.ToTensor(),
-                RandomResizedCrop(self.size, scale=(0.5, 1.0), ratio=(0.75, 1.333))
+                RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.66, 1.5)),
+                ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.3)
             ])
             t_img = transform(t_back_img)
         return t_img, torch.from_numpy(self.labels[idx]).float()
