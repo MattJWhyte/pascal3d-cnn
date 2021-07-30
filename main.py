@@ -64,15 +64,8 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
         epoch_loss += loss.item()
 
         if istrain and batch % 20 == 0:
-            torchvision.utils.save_image(X[0], 'sample.png')
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
-        if not istrain and batch % 20 == 0:
-            torchvision.utils.save_image(X[0], 'sample.png')
-            print("Predicted")
-            print(pred[0].numpy())
-            print("Target")
-            print(y[0].numpy())
 
 
     f = plt.figure()
