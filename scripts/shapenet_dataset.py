@@ -70,11 +70,10 @@ class ShapeNetDataset(Dataset):
             transform = transforms.Compose([
                 transforms.Resize(self.size),
                 transforms.ToTensor(),
-                RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.66, 1.5)),
-                ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.3)
+                RandomResizedCrop(self.size, scale=(0.5, 1.0), ratio=(0.7, 1.3)),
+                ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2)
             ])
             t_img = transform(img)
-            save_image(t_img, "test.png")
         else:
             obj_img = Image.open(img_name).convert('RGBA')
             r_idx = int(rand.uniform() * len(self.sun))
@@ -92,8 +91,8 @@ class ShapeNetDataset(Dataset):
             t_back_img.save(os.path.join(SUN_DIR,"temp",img_name.replace("/","-")))
             transform = transforms.Compose([
                 transforms.ToTensor(),
-                RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.66, 1.5)),
-                ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.3)
+                RandomResizedCrop(self.size, scale=(0.5, 1.0), ratio=(0.7, 1.3)),
+                ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2)
             ])
             t_img = transform(t_back_img)
         return t_img, torch.from_numpy(self.labels[idx]).float()
