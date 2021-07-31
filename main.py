@@ -39,7 +39,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
 
         if batch == 100:
             break
-            
+
         ct += 1
         X, y = X.to(device), y.to(device)
 
