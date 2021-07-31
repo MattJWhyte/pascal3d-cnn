@@ -79,7 +79,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
         if not istrain and batch % 20 == 0:
             b = int(batch // 20)
             if not os.path.exists("predictions/sample-{}".format(b)):
-                os.mkdir("predictions/batch-{}".format(b))
+                os.mkdir("predictions/sample-{}".format(b))
             torchvision.utils.save_image(X[0], "predictions/sample-{}/img.png".format(b))
             ln = []
             ln.append("Predicted : {}\n".format(str(pred.numpy().tolist())))
