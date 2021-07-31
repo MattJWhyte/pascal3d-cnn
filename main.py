@@ -36,6 +36,10 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
     bin_acc = [0.0 for _ in range(24)]
 
     for batch, (X, y) in enumerate(dataloader):
+
+        if batch == 100:
+            break
+            
         ct += 1
         X, y = X.to(device), y.to(device)
 
@@ -79,9 +83,9 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
             torchvision.utils.save_image(X[0], "predictions/batch-{}/img.png".format(b))
             ln = []
             ln.append("Predicted : ".format(str(pred.numpy().tolist())))
-            ln.append("\t\t{}".format(str(distance_elevation_azimuth(pred.numpy()))))
+            ln.append("\t\t{}".format(str(distance_elevation_azimuth(pred.numpy()[0]))))
             ln.append("Target : ".format(str(y.numpy().tolist())))
-            ln.append("\t\t{}".format(str(distance_elevation_azimuth(y.numpy()))))
+            ln.append("\t\t{}".format(str(distance_elevation_azimuth(y.numpy()[0]))))
             with open("predictions/batch-{}/info.txt".format(b), "w") as f:
                 f.writelines(ln)
 
