@@ -10,7 +10,7 @@ from scripts.network import *
 from scripts.dataset import RawPascalDataset
 from scripts.shapenet_dataset import ShapeNetDataset
 from scripts.eval import thirty_deg_accuracy_vector_full, distance_elevation_azimuth
-
+import os
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -72,7 +72,18 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
         if istrain and batch % 20 == 0:
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
-
+        if not istrain and batch % 20 == 0:
+            b = batch % 20
+            if not os.path.exists("predictions/batch-{}".format(b)):
+                os.mkdir("predictions/batch-{}".format(b))
+            torchvision.utils.save_image(X[0], "predictions/batch-{}/img.png".format(b))
+            ln = []
+            ln.append("Predicted : ".format(str(pred.numpy().tolist())))
+            ln.append("\t\t{}".format(str(distance_elevation_azimuth(pred.numpy()))))
+            ln.append("Target : ".format(str(y.numpy().tolist())))
+            ln.append("\t\t{}".format(str(distance_elevation_azimuth(y.numpy()))))
+            with open("predictions/batch-{}/info.txt".format(b), "w") as f:
+                f.writelines(ln)
 
     f = plt.figure()
     ax = f.add_subplot(projection='polar')
