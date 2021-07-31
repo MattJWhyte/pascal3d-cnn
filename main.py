@@ -9,7 +9,7 @@ from torch.utils.data import Dataset, DataLoader
 from scripts.network import *
 from scripts.dataset import RawPascalDataset
 from scripts.shapenet_dataset import ShapeNetDataset
-from scripts.eval import thirty_deg_accuracy_vector, distance_elevation_azimuth
+from scripts.eval import thirty_deg_accuracy_vector_full, distance_elevation_azimuth
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -23,6 +23,8 @@ test_acc_ls = []
 def epoch(dataloader, model, loss_fn, optimizer=None):
     size = len(dataloader.dataset)
     correct = 0.0
+    avg_dev = 0.0
+    min_dev = np.pi
     epoch_loss = 0.0
     ct = 0.0
 
@@ -50,7 +52,11 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
 
         pred = pred.detach().cpu()
         y = y.detach().cpu()
-        k = thirty_deg_accuracy_vector(pred, y)
+        k,mu,m = thirty_deg_accuracy_vector_full(pred, y)
+
+        if m < min_dev:
+            min_dev = m
+        avg_dev += mu
 
         #_,_,e = distance_elevation_azimuth(y.numpy())
         #e = (e % 15).astype(int)
@@ -75,15 +81,20 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
     plt.close()
 
     epoch_loss /= ct
+    avg_dev /= ct
     correct /= float(len(dataloader.dataset))
     if istrain:
         print("Train loss: {}".format(epoch_loss))
         print("Train accuracy: {}".format(correct))
+        print("Train avg dev: {}".format(avg_dev))
+        print("Train min dev: {}".format(min_dev))
         train_loss_ls.append(epoch_loss)
         train_acc_ls.append(correct)
     else:
         print("Test loss: {}".format(epoch_loss))
         print("Test accuracy: {}".format(correct))
+        print("Test avg dev: {}".format(avg_dev))
+        print("Test min dev: {}".format(min_dev))
         test_loss_ls.append(epoch_loss)
         test_acc_ls.append(correct)
 
