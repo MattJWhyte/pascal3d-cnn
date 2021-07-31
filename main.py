@@ -77,7 +77,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
         if not istrain and batch % 10 == 0:
-            b = int(batch // 20)
+            b = batch
             if not os.path.exists("predictions/sample-{}".format(b)):
                 os.mkdir("predictions/sample-{}".format(b))
             torchvision.utils.save_image(X[0], "predictions/sample-{}/img.png".format(b))
