@@ -71,7 +71,7 @@ class ShapeNetDataset(Dataset):
                 transforms.Resize(self.size),
                 transforms.ToTensor(),
                 RandomResizedCrop(self.size, scale=(0.5, 1.0), ratio=(0.7, 1.3)),
-                ColorJitter(brightness=0.1, hue=0.1)
+                ColorJitter(brightness=0.3, hue=0.3)
             ])
             t_img = transform(img)
         else:
@@ -92,7 +92,7 @@ class ShapeNetDataset(Dataset):
             transform = transforms.Compose([
                 transforms.ToTensor(),
                 RandomResizedCrop(self.size, scale=(0.5, 1.0), ratio=(0.7, 1.3)),
-                ColorJitter(brightness=0.1, hue=0.1)
+                ColorJitter(brightness=0.3, hue=0.3)
             ])
             t_img = transform(t_back_img)
         return t_img, torch.from_numpy(self.labels[idx]).float()
