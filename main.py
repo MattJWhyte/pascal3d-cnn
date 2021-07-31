@@ -77,16 +77,16 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
         if not istrain and batch % 20 == 0:
-            b = batch % 20
-            if not os.path.exists("predictions/batch-{}".format(b)):
+            b = int(batch // 20)
+            if not os.path.exists("predictions/sample-{}".format(b)):
                 os.mkdir("predictions/batch-{}".format(b))
-            torchvision.utils.save_image(X[0], "predictions/batch-{}/img.png".format(b))
+            torchvision.utils.save_image(X[0], "predictions/sample-{}/img.png".format(b))
             ln = []
-            ln.append("Predicted : ".format(str(pred.numpy().tolist())))
-            ln.append("\t\t{}".format(str(distance_elevation_azimuth(pred.numpy()[0]))))
-            ln.append("Target : ".format(str(y.numpy().tolist())))
-            ln.append("\t\t{}".format(str(distance_elevation_azimuth(y.numpy()[0]))))
-            with open("predictions/batch-{}/info.txt".format(b), "w") as f:
+            ln.append("Predicted : {}\n".format(str(pred.numpy().tolist())))
+            ln.append("\t\t{}\n".format(str(distance_elevation_azimuth(pred.numpy()[0]))))
+            ln.append("Target : {}\n".format(str(y.numpy().tolist())))
+            ln.append("\t\t{}\n".format(str(distance_elevation_azimuth(y.numpy()[0]))))
+            with open("predictions/sample-{}/info.txt".format(b), "w") as f:
                 f.writelines(ln)
 
     f = plt.figure()
