@@ -96,7 +96,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
             theta = get_angle(pred, y)
             azimuth = []
             for i in range(y.shape[0]):
-                _, e, a = distance_elevation_azimuth(y[i].numpy())[2]
+                _, e, a = distance_elevation_azimuth(y[i].numpy())
                 azimuth.append(a)
                 _, pred_e, pred_a = distance_elevation_azimuth(pred[i].numpy())
                 e_diff = np.abs(e - pred_e)
@@ -121,7 +121,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
             theta = get_angle(pred, y)
             azimuth = []
             for i in range(y.shape[0]):
-                _,e,a = distance_elevation_azimuth(y[i].numpy())[2]
+                _,e,a = distance_elevation_azimuth(y[i].numpy())
                 azimuth.append(a)
                 _,pred_e,pred_a = distance_elevation_azimuth(pred[i].numpy())
                 e_diff = np.abs(e-pred_e)
