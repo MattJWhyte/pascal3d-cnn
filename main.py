@@ -9,7 +9,7 @@ from torch.utils.data import Dataset, DataLoader
 from scripts.network import *
 from scripts.dataset import RawPascalDataset
 from scripts.shapenet_dataset import ShapeNetDataset
-from scripts.eval import thirty_deg_accuracy_vector_full, distance_elevation_azimuth
+from scripts.eval import thirty_deg_accuracy_vector_full, distance_elevation_azimuth, get_angle
 import os
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -96,6 +96,16 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
             ln.append("\t\t{}\n".format(str(distance_elevation_azimuth(y.numpy()[0]))))
             with open("predictions/val-sample-{}/info.txt".format(b), "w") as f:
                 f.writelines(ln)
+
+            theta = get_angle(pred, y)
+            azimuth = []
+            for i in range(y.shape[0]):
+                azimuth.append(distance_elevation_azimuth(y[i].numpy())[2])
+            plt.scatter(azimuth, theta, c='k')
+
+    if not istrain:
+        plt.savefig("predictions/azimuth-error-dist.png")
+        plt.clf()
 
     f = plt.figure()
     ax = f.add_subplot(projection='polar')
