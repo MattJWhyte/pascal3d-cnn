@@ -35,6 +35,11 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
     bin_ct = np.array([0.0 for _ in range(24)])
     bin_acc = [0.0 for _ in range(24)]
 
+    f = plt.figure()
+    ax1 = f.add_subplot(1,2,1, projection='polar')
+    ax2 = f.add_subplot(1,2,2, projection='polar')
+    pred_ls = [[],[],[]]
+
     for batch, (X, y) in enumerate(dataloader):
 
         if batch == 50:
@@ -87,6 +92,13 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
             ln.append("\t\t{}\n".format(str(distance_elevation_azimuth(y.numpy()[0]))))
             with open("predictions/train-sample-{}/info.txt".format(b), "w") as f:
                 f.writelines(ln)
+
+            theta = get_angle(pred, y)
+            azimuth = []
+            for i in range(y.shape[0]):
+                azimuth.append(distance_elevation_azimuth(y[i].numpy())[2])
+            plt.scatter(azimuth, theta, c='k', s=5)
+
         if not istrain:
             b = batch
             if not os.path.exists("predictions/val-sample-{}".format(b)):
@@ -103,12 +115,22 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
             theta = get_angle(pred, y)
             azimuth = []
             for i in range(y.shape[0]):
-                azimuth.append(distance_elevation_azimuth(y[i].numpy())[2])
-            plt.scatter(azimuth, theta, c='k')
+                _,e,a = distance_elevation_azimuth(y[i].numpy())[2]
+                azimuth.append(a)
+                _,pred_e,pred_a = distance_elevation_azimuth(pred[i].numpy())
+                e_diff = np.abs(e-pred_e)
+                pred_ls[0].append(a)
+                pred_ls[1].append(e_diff)
+                pred_ls[2].append(pred_e)
+            ax1.scatter(azimuth, theta, c='k', s=5)
 
+    ax2.scatter(pred[0],pred[1],c=pred[2], cmap='hsv')
+    ax2.scatter()
     if not istrain:
-        plt.savefig("predictions/azimuth-error-dist.png")
-        plt.clf()
+        plt.savefig("predictions/train-error-by-azimuth.png")
+    if not istrain:
+        plt.savefig("predictions/val-error-by-azimuth.png")
+    plt.clf()
 
     f = plt.figure()
     ax = f.add_subplot(projection='polar')
