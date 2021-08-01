@@ -96,8 +96,14 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
             theta = get_angle(pred, y)
             azimuth = []
             for i in range(y.shape[0]):
-                azimuth.append(distance_elevation_azimuth(y[i].numpy())[2])
-            plt.scatter(azimuth, theta, c='k', s=5)
+                _, e, a = distance_elevation_azimuth(y[i].numpy())[2]
+                azimuth.append(a)
+                _, pred_e, pred_a = distance_elevation_azimuth(pred[i].numpy())
+                e_diff = np.abs(e - pred_e)
+                pred_ls[0].append(a)
+                pred_ls[1].append(e_diff)
+                pred_ls[2].append(pred_e)
+            ax1.scatter(azimuth, theta, c='k', s=5)
 
         if not istrain:
             b = batch
