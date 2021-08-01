@@ -73,17 +73,28 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
         if istrain and batch % 20 == 0:
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
-        if not istrain and batch % 10 == 0:
             b = batch
-            if not os.path.exists("predictions/sample-{}".format(b)):
-                os.mkdir("predictions/sample-{}".format(b))
-            torchvision.utils.save_image(X[0], "predictions/sample-{}/img.png".format(b))
+            if not os.path.exists("predictions/train-sample-{}".format(b)):
+                os.mkdir("predictions/train-sample-{}".format(b))
+            torchvision.utils.save_image(X[0], "predictions/train-sample-{}/img.png".format(b))
             ln = []
             ln.append("Predicted : {}\n".format(str(pred.numpy()[0].tolist())))
             ln.append("\t\t{}\n".format(str(distance_elevation_azimuth(pred.numpy()[0]))))
             ln.append("Target : {}\n".format(str(y.numpy()[0].tolist())))
             ln.append("\t\t{}\n".format(str(distance_elevation_azimuth(y.numpy()[0]))))
-            with open("predictions/sample-{}/info.txt".format(b), "w") as f:
+            with open("predictions/train-sample-{}/info.txt".format(b), "w") as f:
+                f.writelines(ln)
+        if not istrain:
+            b = batch
+            if not os.path.exists("predictions/val-sample-{}".format(b)):
+                os.mkdir("predictions/val-sample-{}".format(b))
+            torchvision.utils.save_image(X[0], "predictions/val-sample-{}/img.png".format(b))
+            ln = []
+            ln.append("Predicted : {}\n".format(str(pred.numpy()[0].tolist())))
+            ln.append("\t\t{}\n".format(str(distance_elevation_azimuth(pred.numpy()[0]))))
+            ln.append("Target : {}\n".format(str(y.numpy()[0].tolist())))
+            ln.append("\t\t{}\n".format(str(distance_elevation_azimuth(y.numpy()[0]))))
+            with open("predictions/val-sample-{}/info.txt".format(b), "w") as f:
                 f.writelines(ln)
 
     f = plt.figure()
