@@ -124,7 +124,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
                 pred_ls[2].append(pred_e)
             ax1.scatter(azimuth, theta, c='k', s=5)
 
-    ax2.scatter(pred[0],pred[1],c=pred[2], cmap='hsv')
+    ax2.scatter(pred_ls[0],pred_ls[1],c=pred_ls[2], cmap='hsv')
     ax2.scatter()
     if not istrain:
         plt.savefig("predictions/train-error-by-azimuth.png")
