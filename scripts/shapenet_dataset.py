@@ -70,9 +70,9 @@ class ShapeNetDataset(Dataset):
             #img = Image.open(img_name).convert('RGB')
             transform = transforms.Compose([
                 transforms.Resize(self.size),
-                transforms.ToTensor(),
-                RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.7, 1.8)),
-                ColorJitter(brightness=0.2, hue=0.2, saturation=0.2, contrast=0.2)
+                transforms.ToTensor()
+                #RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.7, 1.8)),
+                #ColorJitter(brightness=0.2, hue=0.2, saturation=0.2, contrast=0.2)
             ])
             t_img = transform(img)
         else:
