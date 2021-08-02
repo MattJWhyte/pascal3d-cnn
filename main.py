@@ -19,7 +19,7 @@ train_acc_ls = []
 test_loss_ls = []
 test_acc_ls = []
 
-BATCH_SIZE = 96
+BATCH_SIZE = 64
 
 
 def epoch(dataloader, model, loss_fn, optimizer=None):
