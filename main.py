@@ -36,11 +36,16 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
     bin_acc = [0.0 for _ in range(24)]
 
     f = plt.figure()
-    ax1 = f.add_subplot(1,2,1, projection='polar')
-    ax2 = f.add_subplot(1,2,2, projection='polar')
-    pred_ls = [[],[],[]]
+    ax1 = f.add_subplot(2,2,1, projection='polar')
+    ax2 = f.add_subplot(2,2,2, projection='polar')
+    ax3 = f.add_subplot(2,2,3, projection='polar')
+    ax4 = f.add_subplot(2,2,4, projection='polar')
+    pred_ls = [[],[],[],[]]
 
     for batch, (X, y) in enumerate(dataloader):
+
+        if batch == 5:
+            break
 
         ct += 1
         X, y = X.to(device), y.to(device)
@@ -99,8 +104,10 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
                 e_diff = np.deg2rad(np.abs(e - pred_e))
                 pred_ls[0].append(np.deg2rad(a))
                 pred_ls[1].append(1+e_diff)
-                pred_ls[2].append(pred_a)
-            ax1.scatter(azimuth, theta, c='k', s=5)
+                pred_ls[2].append(np.deg2rad(pred_a))
+                pred_ls[3].append(np.deg2rad(e))
+                pred_ls[4].append(np.deg2rad(pred_e))
+            ax1.scatter(azimuth, theta, c='k', s=2)
 
         if not istrain:
             b = batch
@@ -124,10 +131,20 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
                 e_diff = np.deg2rad(np.abs(e-pred_e))
                 pred_ls[0].append(np.deg2rad(a))
                 pred_ls[1].append(1+e_diff)
-                pred_ls[2].append(pred_a)
-            ax1.scatter(azimuth, theta, c='k', s=5)
+                pred_ls[2].append(np.deg2rad(pred_a))
+                pred_ls[3].append(np.deg2rad(e))
+                pred_ls[4].append(np.deg2rad(pred_e))
+            ax1.scatter(azimuth, theta, c='k', s=2)
 
-    ax2.scatter(pred_ls[0],pred_ls[1],c=pred_ls[2], cmap='hsv', s=5)
+    ax2.scatter(pred_ls[0],pred_ls[1],c=pred_ls[2], cmap='hsv', s=2)
+    ax3.scatter(pred_ls[0], pred_ls[2], s=2)
+    ax4.scatter(pred_ls[3], pred_ls[4], s=2)
+
+    ax1.set_title("Angle by theta")
+    ax2.set_title("Predictions")
+    ax3.set_title("Pred vs target azimuth")
+    ax4.set_title("Pred vs target elevation")
+
 
     if not istrain:
         plt.savefig("predictions/train-error-by-azimuth.png")
