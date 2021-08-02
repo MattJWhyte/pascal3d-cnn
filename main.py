@@ -43,6 +43,10 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
     pred_ls = [[],[],[],[],[]]
 
     for batch, (X, y) in enumerate(dataloader):
+
+        if batch == 5:
+            break
+        
         ct += 1
         X, y = X.to(device), y.to(device)
 
@@ -59,7 +63,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
 
         pred = pred.detach().cpu()
         y = y.detach().cpu()
-        k,mu,m = thirty_deg_accuracy_vector_full(pred, y)
+        k,mu,m = thirty_deg_accuracy_vector_full(pred, pred)
 
         if m < min_dev:
             min_dev = m
