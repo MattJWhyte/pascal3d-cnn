@@ -71,7 +71,7 @@ class ShapeNetDataset(Dataset):
             transform = transforms.Compose([
                 transforms.Resize(self.size),
                 transforms.ToTensor(),
-                RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.7, 2.0))
+                RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.7, 1.8))
             ])
             t_img = transform(img)
         else:
@@ -91,7 +91,7 @@ class ShapeNetDataset(Dataset):
             t_back_img.save(os.path.join(SUN_DIR,"temp",img_name.replace("/","-")))
             transform = transforms.Compose([
                 transforms.ToTensor(),
-                RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.7, 1.6))
+                RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.7, 1.8))
             ])
             t_img = transform(t_back_img)
         return t_img, torch.from_numpy(self.labels[idx]).float()
