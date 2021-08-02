@@ -40,7 +40,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
     ax2 = f.add_subplot(2,2,2, projection='polar')
     ax3 = f.add_subplot(2,2,3, projection='polar')
     ax4 = f.add_subplot(2,2,4, projection='polar')
-    pred_ls = [[],[],[],[]]
+    pred_ls = [[],[],[],[],[]]
 
     for batch, (X, y) in enumerate(dataloader):
 
