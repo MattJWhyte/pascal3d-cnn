@@ -142,9 +142,9 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
     ax4.set_title("Pred vs target elevation")
 
 
-    if not istrain:
+    if istrain:
         plt.savefig("predictions/train-error-by-azimuth.png")
-    if not istrain:
+    else:
         plt.savefig("predictions/val-error-by-azimuth.png")
     plt.clf()
 
