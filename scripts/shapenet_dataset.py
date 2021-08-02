@@ -70,7 +70,7 @@ class ShapeNetDataset(Dataset):
             transform = transforms.Compose([
                 transforms.Resize(self.size),
                 transforms.ToTensor(),
-                RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.7, 1.6))
+                RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.7, 2.0))
             ])
             t_img = transform(img)
         else:

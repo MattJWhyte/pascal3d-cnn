@@ -97,8 +97,8 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
                 azimuth.append(a)
                 _, pred_e, pred_a = distance_elevation_azimuth(pred[i].numpy())
                 e_diff = np.abs(e - pred_e)
-                pred_ls[0].append(a)
-                pred_ls[1].append(e_diff)
+                pred_ls[0].append(np.deg2rad(a))
+                pred_ls[1].append(1+e_diff)
                 pred_ls[2].append(pred_e)
             ax1.scatter(azimuth, theta, c='k', s=5)
 
@@ -122,8 +122,8 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
                 azimuth.append(a)
                 _,pred_e,pred_a = distance_elevation_azimuth(pred[i].numpy())
                 e_diff = np.abs(e-pred_e)
-                pred_ls[0].append(a)
-                pred_ls[1].append(e_diff)
+                pred_ls[0].append(np.deg2rad(a))
+                pred_ls[1].append(1+e_diff)
                 pred_ls[2].append(pred_e)
             ax1.scatter(azimuth, theta, c='k', s=5)
 
