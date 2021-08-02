@@ -269,8 +269,7 @@ class vgg_pose(nn.Module):
     def __init__(self):
         super(vgg_pose, self).__init__()
         self.features = torchvision.models.vgg16(pretrained=True).features.eval()
-        self.net = nn.Sequential(nn.BatchNorm2d(512),
-                                 nn.Conv2d(512, 512, 5),
+        self.net = nn.Sequential(nn.Conv2d(512, 512, 5),
                                  nn.BatchNorm2d(512),
                                  nn.ReLU(),
                                  nn.Conv2d(512, 512, 3),
