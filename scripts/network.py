@@ -236,7 +236,7 @@ class Net5(nn.Module):
         # Downsample image more before model (128)
 
         # No more than 1024
-        self.fc1 = nn.Linear(3 * 3 * 256, 128)  # 5*5 from image dimension
+        self.fc1 = nn.Linear(4 * 4 * 256, 128)  # 5*5 from image dimension
         self.bn7 = nn.BatchNorm1d(128)
         self.fc2 = nn.Linear(128, 3)
 
