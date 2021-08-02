@@ -60,13 +60,14 @@ def thirty_deg_accuracy_vector(y, target):
 def thirty_deg_accuracy_vector_full(y, target):
     y = y.numpy()
     target = target.detach().numpy()
-    #y = np.repeat(np.array([[1,0,0]]), y.shape[0], axis=0)
-    #target = np.repeat(np.array([[0,1,1]]), target.shape[0], axis=0)
+    y = np.repeat(np.array([[1,0,0]]), y.shape[0], axis=0)
+    target = np.repeat(np.array([[0,1,1]]), target.shape[0], axis=0)
     y_norm = np.linalg.norm(y, axis=1)
     target_norm = np.linalg.norm(target, axis=1)
     norm = y_norm * target_norm.T
     theta = np.arccos(np.diag((y @ target.T)) / norm)
     size = float(theta.shape[0])
+    print(np.rad2deg(theta))
     correct = theta < np.deg2rad(30.0)
     return correct, np.mean(theta), np.min(theta)
 
