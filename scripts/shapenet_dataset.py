@@ -66,7 +66,8 @@ class ShapeNetDataset(Dataset):
     def __getitem__(self, idx):
         cat, img_name = self.data[idx]
         if os.path.exists(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))):
-            img = Image.open(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))).convert('RGB')
+            #img = Image.open(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))).convert('RGB')
+            img = Image.open(img_name).convert('RGB')
             transform = transforms.Compose([
                 transforms.Resize(self.size),
                 transforms.ToTensor(),
