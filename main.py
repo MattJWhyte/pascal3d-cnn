@@ -42,9 +42,6 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
 
     for batch, (X, y) in enumerate(dataloader):
 
-        if batch == 5:
-            break
-        
         ct += 1
         X, y = X.to(device), y.to(device)
 
