@@ -6,11 +6,12 @@ import numpy as np
 
 import matplotlib.cm as cm
 
-model_name = sys.argv[1].lower()
+model_details = sys.argv[1].lower()
+model_name = model_details.split("-")[0]
 width = int(sys.argv[2])
 height = int(sys.argv[3])
 
-eval.predict_model("models/pascal3d-vp-cnn-"+model_name+"-test.pth", MODEL[model_name], model_name, (width,height))
+eval.predict_model("models/pascal3d-vp-cnn-"+model_details+".pth", MODEL[model_name], model_details, (width,height))
 
 
 '''
