@@ -67,7 +67,6 @@ def thirty_deg_accuracy_vector_full(y, target):
     theta = np.arccos(np.diag((y @ target.T)) / norm)
     size = float(theta.shape[0])
     correct = theta < np.deg2rad(100.0)
-    print(correct)
     return correct, np.mean(theta), np.min(theta)
 
 
