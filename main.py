@@ -19,6 +19,8 @@ train_acc_ls = []
 test_loss_ls = []
 test_acc_ls = []
 
+BATCH_SIZE = 96
+
 
 def epoch(dataloader, model, loss_fn, optimizer=None):
     size = len(dataloader.dataset)
@@ -156,7 +158,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
 
     epoch_loss /= ct
     avg_dev /= ct
-    correct /= (ct*96.0) #float(len(dataloader.dataset))
+    correct /= (ct*float(BATCH_SIZE)) #float(len(dataloader.dataset))
     if istrain:
         print("Train loss: {}".format(epoch_loss))
         print("Train accuracy: {}".format(correct))
@@ -192,8 +194,8 @@ train_len = int(len(st)*0.7)
 test_len = len(st)-train_len
 train_set, val_set = torch.utils.data.random_split(st, [train_len, test_len])'''
 
-train_dataloader = DataLoader(train_set, batch_size=96, shuffle=True)
-test_dataloader = DataLoader(val_set, batch_size=96)
+train_dataloader = DataLoader(train_set, batch_size=BATCH_SIZE, shuffle=True)
+test_dataloader = DataLoader(val_set, batch_size=BATCH_SIZE)
 
 model = MODEL[model_name]()
 model.to(device)
