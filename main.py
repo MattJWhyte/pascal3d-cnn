@@ -156,7 +156,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
 
     epoch_loss /= ct
     avg_dev /= ct
-    correct /= batch*96.0 #float(len(dataloader.dataset))
+    correct /= (ct*96.0) #float(len(dataloader.dataset))
     if istrain:
         print("Train loss: {}".format(epoch_loss))
         print("Train accuracy: {}".format(correct))
