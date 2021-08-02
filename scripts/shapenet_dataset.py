@@ -66,12 +66,13 @@ class ShapeNetDataset(Dataset):
     def __getitem__(self, idx):
         cat, img_name = self.data[idx]
         if os.path.exists(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))):
-            #img = Image.open(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))).convert('RGB')
-            img = Image.open(img_name).convert('RGB')
+            img = Image.open(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))).convert('RGB')
+            #img = Image.open(img_name).convert('RGB')
             transform = transforms.Compose([
                 transforms.Resize(self.size),
                 transforms.ToTensor(),
-                RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.7, 1.8))
+                RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.7, 1.8)),
+                ColorJitter(brightness=0.2, hue=0.2, saturation=0.2, contrast=0.2)
             ])
             t_img = transform(img)
         else:
