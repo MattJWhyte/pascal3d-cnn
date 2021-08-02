@@ -12,9 +12,9 @@ import torch
 
 
 def distance_elevation_azimuth(xyz):
-    x = xyz[0]
-    y = xyz[1]
-    z = xyz[2]
+    x = xyz[:,0]
+    y = xyz[:,1]
+    z = xyz[:,2]
     theta = np.abs(90-np.rad2deg(np.arccos(z / np.sqrt(x ** 2 + y ** 2 + z ** 2))))
     if z < 0:
         theta *= -1.0
