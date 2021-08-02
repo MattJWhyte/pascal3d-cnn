@@ -99,7 +99,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
                 e_diff = np.abs(e - pred_e)
                 pred_ls[0].append(np.deg2rad(a))
                 pred_ls[1].append(1+e_diff)
-                pred_ls[2].append(pred_e)
+                pred_ls[2].append(pred_a)
             ax1.scatter(azimuth, theta, c='k', s=5)
 
         if not istrain:
@@ -124,7 +124,7 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
                 e_diff = np.abs(e-pred_e)
                 pred_ls[0].append(np.deg2rad(a))
                 pred_ls[1].append(1+e_diff)
-                pred_ls[2].append(pred_e)
+                pred_ls[2].append(pred_a)
             ax1.scatter(azimuth, theta, c='k', s=5)
 
     ax2.scatter(pred_ls[0],pred_ls[1],c=pred_ls[2], cmap='hsv', s=5)
