@@ -257,8 +257,7 @@ class Net5(nn.Module):
 
         x = torch.flatten(x, 1)    # flatten all dimensions except the batch dimension
         x = F.silu(self.bn7(self.fc1(x)))
-        x = F.silu(self.fc2(x))
-
+        x = self.fc2(x)
         return x
 
     def save(self, PATH):
