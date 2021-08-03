@@ -158,8 +158,6 @@ def as_cartesian(rthetaphi):
         print("BIG THETA PROBLEM")
     if np.abs(rthetaphi[2] - rtp[2]) > 0.005:
         print("BIG PHI PROBLEM")
-
-    print(np.sqrt(x**2+y**2+z**2))
     return [x,y,z]
 
 
