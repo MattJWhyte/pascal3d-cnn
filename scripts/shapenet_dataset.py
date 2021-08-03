@@ -66,12 +66,15 @@ class ShapeNetDataset(Dataset):
     def __getitem__(self, idx):
         cat, img_name = self.data[idx]
         if os.path.exists(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))):
-            img = Image.open(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))).convert('RGB')
+            #img = Image.open(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))).convert('RGB')
+            M = np.asarray(Image.open(img_name))
+            M = crop_image_outside_based_on_transparency(M)
+            img = Image.fromarray(np.uint8(M))
             #img = Image.open(img_name).convert('RGB')
             transform = transforms.Compose([
                 transforms.Resize(self.size),
                 transforms.ToTensor(),
-                RandomResizedCrop(self.size, scale=(0.6, 1.0), ratio=(0.7, 1.3))
+                # RandomResizedCrop(self.size, scale=(0.6, 1.0), ratio=(0.7, 1.3))
                 #ColorJitter(brightness=0.2, hue=0.2, saturation=0.2, contrast=0.2)
             ])
             t_img = transform(img)
@@ -123,6 +126,19 @@ class VMBiasedShapeNetDataset(ShapeNetDataset):
 
     def __getitem__(self, idx):
         return super().__getitem__(self.sample_idx[idx])
+
+
+def crop_image_outside_based_on_transparency(img, tol=0, padding=10):
+    # img is 3D image data with transparency channel
+    # tol is tolerance (0 in your case)
+    # we are interested only in the transparency layer so:
+    trans_layer = img[:,:,3]
+    mask = trans_layer > tol
+    m, n = trans_layer.shape
+    mask0, mask1 = mask.any(0), mask.any(1)
+    col_start,col_end = np.max(mask0.argmax()-padding, 0), np.min(n-mask0[::-1].argmax()+padding, n)
+    row_start,row_end = np.max(mask1.argmax()-padding, 0), np.min(m-mask1[::-1].argmax()+padding, m)
+    return img[row_start:row_end, col_start:col_end, :]
 
 
 def distance_elevation_azimuth(xyz):
