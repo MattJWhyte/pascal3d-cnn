@@ -35,7 +35,6 @@ class ShapeNetDataset(Dataset):
         for cat in (CATEGORY_CODES if cat_ls is None else [CATEGORY_CODES[CATEGORIES.index(name)] for name in cat_ls]):
             self.append_samples(cat)
         self.sun = []
-        '''
         with open(os.path.join(SUN_DIR,"ClassName.txt"), "r") as f:
             groups = f.readlines()
             for g in groups:
@@ -43,7 +42,7 @@ class ShapeNetDataset(Dataset):
                 img_list = [os.path.join(SUN_DIR,g,img_name) for img_name in os.listdir(os.path.join(SUN_DIR,g))]
                 self.sun += img_list
         if not os.path.exists(os.path.join(SUN_DIR,"temp")):
-            os.mkdir(os.path.join(SUN_DIR,"temp"))'''
+            os.mkdir(os.path.join(SUN_DIR,"temp"))
 
     def append_samples(self, cat):
         path = os.path.join(DATASET_DIR, cat)
