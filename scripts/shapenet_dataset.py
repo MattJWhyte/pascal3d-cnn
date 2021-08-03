@@ -136,8 +136,8 @@ def crop_image_outside_based_on_transparency(img, tol=0, padding=10):
     mask = trans_layer > tol
     m, n = trans_layer.shape
     mask0, mask1 = mask.any(0), mask.any(1)
-    col_start,col_end = np.max(mask0.argmax()-padding, 0), np.min(n-mask0[::-1].argmax()+padding, n)
-    row_start,row_end = np.max(mask1.argmax()-padding, 0), np.min(m-mask1[::-1].argmax()+padding, m)
+    col_start,col_end = max(mask0.argmax()-padding, 0), min(n-mask0[::-1].argmax()+padding, n)
+    row_start,row_end = max(mask1.argmax()-padding, 0), min(m-mask1[::-1].argmax()+padding, m)
     return img[row_start:row_end, col_start:col_end, :]
 
 
