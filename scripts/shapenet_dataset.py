@@ -69,7 +69,7 @@ class ShapeNetDataset(Dataset):
             #img = Image.open(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))).convert('RGB')
             M = np.asarray(Image.open(img_name))
             M = crop_image_outside_based_on_transparency(M)
-            img = Image.fromarray(np.uint8(M))
+            img = Image.fromarray(np.uint8(M)).convert("RGB")
             #img = Image.open(img_name).convert('RGB')
             transform = transforms.Compose([
                 transforms.Resize(self.size),
