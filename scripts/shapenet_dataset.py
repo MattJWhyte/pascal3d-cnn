@@ -64,17 +64,13 @@ class ShapeNetDataset(Dataset):
 
     def __getitem__(self, idx):
         cat, img_name = self.data[idx]
-        if False: #os.path.exists(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))):
-            #img = Image.open(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))).convert('RGB')
-            M = np.asarray(Image.open(img_name))
-            M = crop_image_outside_based_on_transparency(M)
-            img = Image.fromarray(np.uint8(M)).convert("RGB")
-            #img = Image.open(img_name).convert('RGB')
+        if os.path.exists(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))):
+            img = Image.open(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))).convert('RGB')
             transform = transforms.Compose([
                 transforms.Resize(self.size),
                 transforms.ToTensor(),
-                # RandomResizedCrop(self.size, scale=(0.6, 1.0), ratio=(0.7, 1.3))
-                #ColorJitter(brightness=0.2, hue=0.2, saturation=0.2, contrast=0.2)
+                RandomResizedCrop(self.size, scale=(0.6, 0.7), ratio=(0.9, 1.1)),
+                ColorJitter(brightness=0.2, hue=0.2, saturation=0.2, contrast=0.2)
             ])
             t_img = transform(img)
         else:
@@ -96,7 +92,8 @@ class ShapeNetDataset(Dataset):
             t_back_img.save(os.path.join(SUN_DIR,"temp",img_name.replace("/","-")))
             transform = transforms.Compose([
                 transforms.ToTensor(),
-                RandomResizedCrop(self.size, scale=(0.4, 1.0), ratio=(0.7, 1.8))
+                RandomResizedCrop(self.size, scale=(0.6, 0.7), ratio=(0.9, 1.1)),
+                ColorJitter(brightness=0.2, hue=0.2, saturation=0.2, contrast=0.2)
             ])
             t_img = transform(t_back_img)
         return t_img, torch.from_numpy(self.labels[idx]).float()
@@ -129,7 +126,7 @@ class VMBiasedShapeNetDataset(ShapeNetDataset):
         return super().__getitem__(self.sample_idx[idx])
 
 
-def crop_image_outside_based_on_transparency(img, tol=0, padding=10):
+def crop_image_outside_based_on_transparency(img, tol=0, padding=20):
     # img is 3D image data with transparency channel
     # tol is tolerance (0 in your case)
     # we are interested only in the transparency layer so:
