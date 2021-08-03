@@ -65,7 +65,7 @@ class ShapeNetDataset(Dataset):
 
     def __getitem__(self, idx):
         cat, img_name = self.data[idx]
-        if os.path.exists(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))):
+        if False: #os.path.exists(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))):
             #img = Image.open(os.path.join(SUN_DIR,"temp",img_name.replace("/","-"))).convert('RGB')
             M = np.asarray(Image.open(img_name))
             M = crop_image_outside_based_on_transparency(M)
@@ -79,7 +79,9 @@ class ShapeNetDataset(Dataset):
             ])
             t_img = transform(img)
         else:
-            obj_img = Image.open(img_name).convert('RGBA')
+            M = np.asarray(Image.open(img_name).convert("RGBA"))
+            M = crop_image_outside_based_on_transparency(M)
+            obj_img = Image.fromarray(np.uint8(M)).convert("RGB")
             r_idx = int(rand.uniform() * len(self.sun))
             img_path = self.sun[r_idx]
             back_img = Image.open(img_path).convert('RGBA')
