@@ -48,9 +48,6 @@ def epoch(dataloader, model, loss_fn, optimizer=None):
         ct += 1
         X, y = X.to(device), y.to(device)
 
-        if batch == 5:
-            break
-
         # Compute prediction and loss
         pred = model(X)
         pred = pred/pred.norm(dim=1, keepdim=True)
