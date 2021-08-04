@@ -33,9 +33,6 @@ def epoch(dataloader, model, loss_fn, train_loss_ls, train_acc_ls, test_loss_ls,
         ct += 1
         X, y = X.to(device), y.to(device)
 
-        if batch == 1:
-            break
-
         # Compute prediction and loss
         pred = model(X)
         pred = pred/pred.norm(dim=1, keepdim=True)
@@ -98,8 +95,8 @@ def train(train_dataloader, test_dataloader, name):
         plt.plot([i for i in range(1, t + 2)], test_loss_ls, 'b--', label="Test loss")
         plt.legend()
         plt.xlabel("Epoch")
-        plt.savefig("temp-training.png")
         plt.title(name)
+        plt.savefig("temp-training.png")
         plt.clf()
 
         current_loss = test_loss_ls[-1]
