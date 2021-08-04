@@ -33,7 +33,7 @@ def epoch(dataloader, model, loss_fn, train_loss_ls, train_acc_ls, test_loss_ls,
         ct += 1
         X, y = X.to(device), y.to(device)
 
-        if batch == 5:
+        if batch == 1:
             break
 
         # Compute prediction and loss
@@ -89,7 +89,6 @@ def train(train_dataloader, test_dataloader, name):
     best_val_acc = 0.0
 
     for t in range(MAX_EPOCH):
-        print("X", end="")
         epoch(train_dataloader, model, loss_fn, train_loss_ls, train_acc_ls, test_loss_ls, test_acc_ls, optimizer)
         epoch(test_dataloader, model, loss_fn, train_loss_ls, train_acc_ls, test_loss_ls, test_acc_ls)
 
@@ -115,7 +114,6 @@ def train(train_dataloader, test_dataloader, name):
         else:
             epochs_without_improvement += 1
 
-    print("")
     return best_train_acc, best_val_acc
 
 
@@ -125,7 +123,7 @@ if __name__ == "__main__":
         shapenet_train_set = ShapeNetDataset((224, 224), cat_ls=[cat])
         pascal_set = RawPascalDataset((224, 224), train=True, cat_ls=[cat])
         n = len(pascal_set)
-        pascal_train_set, pascal_val_set = torch.utils.data.random_split(pascal_set, (int(n*0.8), int(n*0.2)))
+        pascal_train_set, pascal_val_set = torch.utils.data.random_split(pascal_set, (int(n*0.8), n - int(n*0.8)))
         pascal_train_dataloader = DataLoader(pascal_train_set, batch_size=BATCH_SIZE, shuffle=True)
         shapenet_train_dataloader = DataLoader(shapenet_train_set, batch_size=BATCH_SIZE, shuffle=True)
         pascal_val_dataloader = DataLoader(pascal_val_set, batch_size=BATCH_SIZE)
