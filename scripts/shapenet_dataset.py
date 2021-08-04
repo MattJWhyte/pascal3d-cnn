@@ -75,7 +75,7 @@ class ShapeNetDataset(Dataset):
             t_img = transform(img)
         else:
             M = np.asarray(Image.open(img_name).convert("RGBA"))
-            M = crop_image_outside_based_on_transparency(M)
+            M = crop_image_outside_based_on_transparency(M, padding=0)
             obj_img = Image.fromarray(np.uint8(M)).convert("RGBA")
             r_idx = int(rand.uniform() * len(self.sun))
             img_path = self.sun[r_idx]
