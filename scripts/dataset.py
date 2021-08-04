@@ -35,8 +35,8 @@ class RawPascalDataset(Dataset):
                         continue
                     az = ann["viewpoint"]["azimuth"]
                     el = ann["viewpoint"]["elevation"]
-                    bb = ann["bbox"]
-                    print(type(bb))
+                    print(ann.keys())
+
                     coords = as_cartesian([1, el, az])
                     self.labels.append(np.array(coords))
                     self.data.append((cat, img_name))
