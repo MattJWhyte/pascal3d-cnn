@@ -35,11 +35,10 @@ class RawPascalDataset(Dataset):
                         continue
                     az = ann["viewpoint"]["azimuth"]
                     el = ann["viewpoint"]["elevation"]
-                    print(type(ann["bbox"]))
-
+                    bb = ann["bbox"]
                     coords = as_cartesian([1, el, az])
                     self.labels.append(np.array(coords))
-                    self.data.append((cat, img_name))
+                    self.data.append((cat, img_name, bb))
                     out += img_name + "\n"
             self.cat_idx.append(len(self.labels))
         self.cat_idx = np.array(self.cat_idx)
@@ -48,8 +47,9 @@ class RawPascalDataset(Dataset):
         return len(self.data)
 
     def __getitem__(self, idx):
-        cat,img_name = self.data[idx]
+        cat,img_name,bb = self.data[idx]
         img = Image.open("{}/Images/{}_imagenet/{}.JPEG".format(config.PASCAL_DIR, cat, img_name)).convert('RGB')
+        img = img.crop(bb[0], bb[1], bb[3], bb[4])
         transform = transforms.Compose([
             transforms.Resize(self.size),
             transforms.ToTensor()
