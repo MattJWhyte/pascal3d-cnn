@@ -19,7 +19,6 @@ MAX_EPOCH = 50
 
 
 def epoch(dataloader, model, loss_fn, train_loss_ls, train_acc_ls, test_loss_ls, test_acc_ls, optimizer=None):
-    size = len(dataloader.dataset)
     correct = 0.0
     avg_dev = 0.0
     min_dev = np.pi
@@ -29,16 +28,6 @@ def epoch(dataloader, model, loss_fn, train_loss_ls, train_acc_ls, test_loss_ls,
     istrain = optimizer is not None
     torch.autograd.set_grad_enabled(istrain)
     model = model.train() if istrain else model.eval()
-
-    bin_ct = np.array([0.0 for _ in range(24)])
-    bin_acc = [0.0 for _ in range(24)]
-
-    f = plt.figure()
-    ax1 = f.add_subplot(2,2,1, projection='polar')
-    ax2 = f.add_subplot(2,2,2, projection='polar')
-    ax3 = f.add_subplot(2,2,3)
-    ax4 = f.add_subplot(2,2,4)
-    pred_ls = [[],[],[],[],[]]
 
     for batch, (X, y) in enumerate(dataloader):
         ct += 1
