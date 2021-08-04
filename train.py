@@ -133,3 +133,4 @@ if __name__ == "__main__":
         print("Pascal - ", end="")
         train_acc, test_acc = train(pascal_train_dataloader, pascal_val_dataloader, "{}-{}".format(cat, "pascal"))
         print("Train {}% Val {}%".format(np.round(train_acc, 2), np.round(test_acc, 2)))
+        print("--------------------------------")
