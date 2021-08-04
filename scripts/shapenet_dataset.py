@@ -69,7 +69,7 @@ class ShapeNetDataset(Dataset):
             transform = transforms.Compose([
                 transforms.Resize(self.size),
                 transforms.ToTensor(),
-                RandomResizedCrop(self.size, scale=(0.6, 0.7), ratio=(0.9, 1.1)),
+                RandomResizedCrop(self.size, scale=(0.8, 0.9), ratio=(1.0, 1.0)),
                 ColorJitter(brightness=0.2, hue=0.2, saturation=0.2, contrast=0.2)
             ])
             t_img = transform(img)
@@ -92,7 +92,7 @@ class ShapeNetDataset(Dataset):
             t_back_img.save(os.path.join(SUN_DIR,"temp",img_name.replace("/","-")))
             transform = transforms.Compose([
                 transforms.ToTensor(),
-                RandomResizedCrop(self.size, scale=(0.6, 0.7), ratio=(0.9, 1.1)),
+                RandomResizedCrop(self.size, scale=(0.8, 0.9), ratio=(1.0, 1.0)),
                 ColorJitter(brightness=0.2, hue=0.2, saturation=0.2, contrast=0.2)
             ])
             t_img = transform(t_back_img)
