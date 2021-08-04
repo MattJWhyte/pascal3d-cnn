@@ -35,7 +35,7 @@ class RawPascalDataset(Dataset):
                         continue
                     az = ann["viewpoint"]["azimuth"]
                     el = ann["viewpoint"]["elevation"]
-                    print(ann.keys())
+                    print(type(ann["bbox"]))
 
                     coords = as_cartesian([1, el, az])
                     self.labels.append(np.array(coords))
@@ -97,7 +97,8 @@ def get_image_annotations(img, category):
                 "truncated": o["truncated"][0, 0],
                 "occluded": o["occluded"][0, 0],
                 "difficult": o["difficult"][0, 0],
-                "class": o["class"][0]
+                "class": o["class"][0],
+                "bbox": o["bbox"][0]
             }
             vp = o["viewpoint"]
             if vp.size > 0:
