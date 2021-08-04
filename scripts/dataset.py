@@ -49,7 +49,7 @@ class RawPascalDataset(Dataset):
     def __getitem__(self, idx):
         cat,img_name,bb = self.data[idx]
         img = Image.open("{}/Images/{}_imagenet/{}.JPEG".format(config.PASCAL_DIR, cat, img_name)).convert('RGB')
-        img = img.crop(bb[0], bb[1], bb[3], bb[4])
+        img = img.crop(bb[0], bb[1], bb[2], bb[3])
         transform = transforms.Compose([
             transforms.Resize(self.size),
             transforms.ToTensor()
