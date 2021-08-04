@@ -180,13 +180,15 @@ model_name = sys.argv[1].lower()
 width = int(sys.argv[2])
 height = int(sys.argv[3])
 comment = ""
+cats = None
 if len(sys.argv) > 4:
     comment = "-" + sys.argv[4]
+    cats = sys.argv[4].split(",")
 
 print("Saving model to 'models/pascal3d-vp-cnn-"+model_name+comment+".pth'")
 
-train_set = ShapeNetDataset((width,height), cat_ls=["aeroplane"])
-val_set = RawPascalDataset((width,height), train=False, cat_ls=["aeroplane"])
+train_set = ShapeNetDataset((width,height), cat_ls=cats)
+val_set = RawPascalDataset((width,height), train=False, cat_ls=cats)
 
 '''
 st = ShapeNetDataset((width,height), cat_ls=["aeroplane"])
