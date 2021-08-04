@@ -106,7 +106,7 @@ def train(train_dataloader, test_dataloader, name):
             best_train_acc = train_acc_ls[-1]
             best_val_acc = test_acc_ls[-1]
             epochs_without_improvement = 0
-        elif epochs_without_improvement > 5:
+        elif epochs_without_improvement > 5 and t > 15:
             return best_train_acc, best_val_acc
         else:
             epochs_without_improvement += 1
