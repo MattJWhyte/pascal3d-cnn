@@ -39,8 +39,6 @@ def thirty_deg_accuracy(y, target):
     y = y.numpy()
     target = target.detach().numpy()
     y = np.reshape(y, (1,3))
-    print(y.shape)
-    print(target.shape)
     y_norm = np.linalg.norm(y, axis=1)
     target_norm = np.linalg.norm(target, axis=1)
     norm = y_norm * target_norm.T
