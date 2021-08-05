@@ -102,7 +102,7 @@ def get_accuracy_vector(pth, net):
     nt.eval()
     nt.to('cuda' if torch.cuda.is_available() else "cpu")
     dset = RawPascalDataset((224,224), train=False)
-    dataloader = DataLoader(dset, batch_size=2)
+    dataloader = DataLoader(dset, batch_size=1)
     n = len(dset)
     acc_vec = np.zeros(n)
     i = 0
