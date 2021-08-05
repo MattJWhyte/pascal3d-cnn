@@ -109,6 +109,7 @@ def get_accuracy_vector(pth, net):
         X = X.to('cuda' if torch.cuda.is_available() else "cpu")
         y = nt(X).detach().cpu()
         k = thirty_deg_accuracy(y, target)
+        print(k)
         X.detach()
         del X
         torch.cuda.empty_cache()
