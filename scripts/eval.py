@@ -68,14 +68,14 @@ def thirty_deg_accuracy_vector_full(y, target):
     return correct, np.mean(theta), np.min(theta)
 
 
-def evaluate_model(pth, net):
+def evaluate_model(pth, net, batch_size=48):
     # Load model
     nt = net()
     nt.load(pth)
     nt.eval()
     nt.to('cuda' if torch.cuda.is_available() else "cpu")
     dset = RawPascalDataset((224,224), train=False)
-    dataloader = DataLoader(dset, batch_size=48)
+    dataloader = DataLoader(dset, batch_size=batch_size)
     n = len(dset)
     acc = 0.0
     ct = 0.0
@@ -91,6 +91,28 @@ def evaluate_model(pth, net):
         torch.cuda.empty_cache()
         acc += k
     return acc/ct, np.median(np.array(theta))
+
+
+def get_accuracy_vector(pth, net):
+    # Load model
+    nt = net()
+    nt.load(pth)
+    nt.eval()
+    nt.to('cuda' if torch.cuda.is_available() else "cpu")
+    dset = RawPascalDataset((224,224), train=False)
+    dataloader = DataLoader(dset, batch_size=1)
+    n = len(dset)
+    acc_vec = np.zeros(n)
+    i = 0
+    for X, target in dataloader:
+        X = X.to('cuda' if torch.cuda.is_available() else "cpu")
+        y = nt(X).detach().cpu()
+        k = thirty_deg_accuracy(y, target)
+        X.detach()
+        del X
+        torch.cuda.empty_cache()
+        acc_vec[i] = k
+    return acc_vec
 
 
 def predict_model(pth, net, net_name, size):
