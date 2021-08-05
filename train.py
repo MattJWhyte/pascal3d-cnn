@@ -115,7 +115,7 @@ def train(train_dataloader, test_dataloader, name):
 
 
 if __name__ == "__main__":
-    for cat in CATEGORIES:
+    for cat in ["train","tvmonitor"]:
         print("TRAINING {}".format(cat))
         shapenet_train_set = ShapeNetDataset((224, 224), cat_ls=[cat])
         pascal_set = RawPascalDataset((224, 224), train=True, cat_ls=[cat])
