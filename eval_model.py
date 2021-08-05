@@ -8,8 +8,12 @@ import matplotlib.cm as cm
 
 
 for cat in ["aeroplane", "bicycle", "bus", "car", "chair", "motorbike"]:
-    acc = eval.get_accuracy_vector("models/pascal3d-vp-cnn-vgg_pose-{}.pth", vgg_pose)
-    print(acc)
+    print("Getting accuracy vector for {} ...".format(cat))
+    shapenet_acc = eval.get_accuracy_vector("models/pascal3d-vp-cnn-vgg_pose-{}-shapenet.pth".format(cat), vgg_pose)
+    np.save("results/vgg_pose-{}-shapenet-acc.npy".format(cat), shapenet_acc)
+    pascal_acc = eval.get_accuracy_vector("models/pascal3d-vp-cnn-vgg_pose-{}-shapenet.pth".format(cat), vgg_pose)
+    np.save("results/vgg_pose-{}-pascal-acc.npy".format(cat), pascal_acc)
+
 
 '''
 model_details = sys.argv[1].lower()
