@@ -113,6 +113,7 @@ def get_accuracy_vector(pth, net, cat):
         del X
         torch.cuda.empty_cache()
         acc_vec[i] = k
+        i += 1
     return acc_vec
 
 
