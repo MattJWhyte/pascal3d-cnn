@@ -11,7 +11,7 @@ for cat in ["aeroplane", "bicycle", "bus", "car", "chair", "motorbike"]:
     print("Getting accuracy vector for {} ...".format(cat))
     shapenet_acc = eval.get_accuracy_vector("models/pascal3d-vp-cnn-vgg_pose-{}-shapenet.pth".format(cat), vgg_pose)
     np.save("results/vgg_pose-{}-shapenet-acc.npy".format(cat), shapenet_acc)
-    pascal_acc = eval.get_accuracy_vector("models/pascal3d-vp-cnn-vgg_pose-{}-shapenet.pth".format(cat), vgg_pose)
+    pascal_acc = eval.get_accuracy_vector("models/pascal3d-vp-cnn-vgg_pose-{}-pascal.pth".format(cat), vgg_pose)
     np.save("results/vgg_pose-{}-pascal-acc.npy".format(cat), pascal_acc)
 
 
