@@ -38,6 +38,8 @@ def get_angle(y,target):
 def thirty_deg_accuracy(y, target):
     y = y.numpy()
     target = target.detach().numpy()
+    print(y.shape)
+    print(target.shape)
     y_norm = np.linalg.norm(y, axis=1)
     target_norm = np.linalg.norm(target, axis=1)
     norm = y_norm * target_norm.T
@@ -100,7 +102,7 @@ def get_accuracy_vector(pth, net):
     nt.eval()
     nt.to('cuda' if torch.cuda.is_available() else "cpu")
     dset = RawPascalDataset((224,224), train=False)
-    dataloader = DataLoader(dset, batch_size=1)
+    dataloader = DataLoader(dset, batch_size=2)
     n = len(dset)
     acc_vec = np.zeros(n)
     i = 0
