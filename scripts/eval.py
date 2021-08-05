@@ -94,13 +94,13 @@ def evaluate_model(pth, net, batch_size=48):
     return acc/ct, np.median(np.array(theta))
 
 
-def get_accuracy_vector(pth, net):
+def get_accuracy_vector(pth, net, cat):
     # Load model
     nt = net()
     nt.load(pth)
     nt.eval()
     nt.to('cuda' if torch.cuda.is_available() else "cpu")
-    dset = RawPascalDataset((224,224), train=False)
+    dset = RawPascalDataset((224,224), cat_ls=[cat], train=False)
     dataloader = DataLoader(dset, batch_size=1)
     n = len(dset)
     acc_vec = np.zeros(n)
